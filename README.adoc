@@ -1,0 +1,16 @@
+= Metanorma-plugin-datastruct
+
+== Functionality
+
+TODO: Functionality
+
+=== Installation
+
+[source,console]
+----
+$ gem install mn-plugin-datastruct
+----
+
+== Documentation
+
+See http://metanorma.com[]
