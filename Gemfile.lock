@@ -3,6 +3,7 @@ PATH
   specs:
     mn-plugin-datastruct (0.1.0)
       asciidoctor (~> 2.0.0)
+      liquid
 
 GEM
   remote: https://rubygems.org/
@@ -16,6 +17,7 @@ GEM
     diff-lcs (1.4.4)
     docile (1.3.2)
     hashdiff (1.0.1)
+    liquid (4.0.3)
     parallel (1.19.2)
     parser (2.7.1.4)
       ast (~> 2.4.1)

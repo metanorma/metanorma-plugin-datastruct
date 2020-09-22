@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "asciidoctor", "~> 2.0.0"
+  spec.add_dependency "liquid"
 
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "rake", "~> 12.0"

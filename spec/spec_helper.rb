@@ -1,5 +1,9 @@
 require "bundler/setup"
 require "mn-plugin-datastruct"
+require "rexml/document"
+require "byebug"
+
+Dir[File.expand_path("./support/**/**/*.rb", __dir__)].each { |f| require f }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -11,4 +15,12 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+def xmlpp(x)
+  s = ""
+  f = REXML::Formatters::Pretty.new(2)
+  f.compact = true
+  f.write(REXML::Document.new(x), s)
+  s
 end
