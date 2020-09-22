@@ -2,7 +2,7 @@
 
 == Functionality
 
-TODO: Functionality
+Metanorma plugin that allows you to access static data structures like JSON, YAML, XML from a Metanorma document
 
 === Installation
 
