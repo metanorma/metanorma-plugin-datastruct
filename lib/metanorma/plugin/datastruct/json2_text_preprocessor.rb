@@ -38,7 +38,8 @@ module Metanorma
         protected
 
         def content_from_file(document, file_path)
-          JSON.parse(File.read(relative_file_path(document, file_path)))
+          JSON.parse(File.read(relative_file_path(document, file_path),
+            encoding: "UTF-8"))
         end
       end
     end
