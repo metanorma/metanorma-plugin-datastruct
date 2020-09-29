@@ -574,7 +574,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
     context "Date time objects support" do
       let(:example_content) do
-        { "date" => Date.parse('1889-09-28'), "time" => Time.gm(2020, 10, 15, 5, 34) }
+        { "date" => Date.parse("1889-09-28"), "time" => Time.gm(2020, 10, 15, 5, 34) }
       end
       let(:input) do
         <<~TEXT
@@ -754,9 +754,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
       it "renders liquid markup" do
         expect(
-          xmlpp((
-              Asciidoctor.convert(input)
-            )
+          xmlpp(
+            Asciidoctor.convert(input)
           )
         ).to(eq(xmlpp(output)))
       end

@@ -60,10 +60,10 @@ module Metanorma
 
           end_mark = input_lines.next
           parse_template(document,
-                        collect_internal_block_lines(document,
+                         collect_internal_block_lines(document,
                                                       input_lines,
                                                       end_mark),
-                        block_match)
+                         block_match)
         end
 
         def collect_internal_block_lines(document, input_lines, end_mark)
