@@ -29,6 +29,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
+          == base
+
           [#{extention}2text,#{example_file},my_context]
           ----
           {my_context.*,item,EOF}
@@ -39,19 +41,25 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='dlist'>
-            <dl>
-              <dt class='hdlist1'>spaghetti</dt>
-              <dd>
-                <p>wheat noodles of 9mm diameter</p>
-              </dd>
-            </dl>
+          <div class="sect1">
+            <h2 id="_base">base</h2>
+            <div class="sectionbody">
+              <div class="dlist">
+                <dl>
+                  <dt class="hdlist1">spaghetti</dt>
+                  <dd>
+                    <p>wheat noodles of 9mm diameter</p>
+                  </dd>
+                </dl>
+              </div>
+            </div>
           </div>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -84,24 +92,24 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='sect2'>
-                <h3 id='_0_lorem'>0 lorem</h3>
-                <div class='paragraph'>
+          <div class="sect1">
+            <h2 id="_base">base</h2>
+            <div class="sectionbody">
+              <div class="sect2">
+                <h3 id="_0_lorem">0 lorem</h3>
+                <div class="paragraph">
                   <p>This section is about lorem.</p>
                 </div>
               </div>
-              <div class='sect2'>
-                <h3 id='_1_ipsum'>1 ipsum</h3>
-                <div class='paragraph'>
+              <div class="sect2">
+                <h3 id="_1_ipsum">1 ipsum</h3>
+                <div class="paragraph">
                   <p>This section is about ipsum.</p>
                 </div>
               </div>
-              <div class='sect2'>
-                <h3 id='_2_dolor'>2 dolor</h3>
-                <div class='paragraph'>
+              <div class="sect2">
+                <h3 id="_2_dolor">2 dolor</h3>
+                <div class="paragraph">
                   <p>This section is about dolor.</p>
                 </div>
               </div>
@@ -111,7 +119,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -141,12 +150,12 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='sect2'>
-                <h3 id='_lorem_ipsum'>Lorem ipsum</h3>
-                <div class='paragraph'>
+          <div class="sect1">
+            <h2 id="_base">base</h2>
+            <div class="sectionbody">
+              <div class="sect2">
+                <h3 id="_lorem_ipsum">Lorem ipsum</h3>
+                <div class="paragraph">
                   <p>dolor sit amet</p>
                 </div>
               </div>
@@ -156,7 +165,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -210,7 +220,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -248,15 +259,15 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='dlist'>
+          <div class="sect1">
+            <h2 id="_base">base</h2>
+            <div class="sectionbody">
+              <div class="dlist">
                 <dl>
-                  <dt class='hdlist1'>Lorem</dt>
+                  <dt class="hdlist1">Lorem</dt>
                   <dd>
                     <p>ipsum</p>
-                    <div class='ulist'>
+                    <div class="ulist">
                       <ul>
                         <li>
                           <p>Lorem: 2</p>
@@ -264,14 +275,14 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
                       </ul>
                     </div>
                   </dd>
-                  <dt class='hdlist1'>dolor</dt>
+                  <dt class="hdlist1">dolor</dt>
                   <dd>
                     <p>sit</p>
                   </dd>
-                  <dt class='hdlist1'>amet</dt>
+                  <dt class="hdlist1">amet</dt>
                   <dd>
                     <p>lorem</p>
-                    <div class='ulist'>
+                    <div class="ulist">
                       <ul>
                         <li>
                           <p>amet: 2</p>
@@ -293,7 +304,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -324,7 +336,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
           [source,ruby]
           ----
-          include::{#{extention}.prefix}{s.#}.rb[]
+          {#{extention}.prefix}{s.#}.rb[]
           ----
 
           {EOS}
@@ -333,39 +345,34 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='paragraph'>
-                <p>First item is lorem. Last item is dolor.</p>
+          <div class="sect1">
+            <h2 id="_base">base</h2>
+            <div class="sectionbody">
+              <div class="paragraph">
+                <p>First item is lorem.
+                  Last item is dolor.</p>
               </div>
-              <div class='sect2'>
-                <h3 id='_0_1_lorem_lorem'>0 &#8594; 1 lorem == lorem</h3>
-                <div class='listingblock'>
-                  <div class='content'>
-                    <pre class='highlight'>
-                      <code class='language-ruby' data-lang='ruby'>link:doc-0.rb[]</code>
-                    </pre>
+              <div class="sect2">
+                <h3 id="_0_1_lorem_lorem">0 → 1 lorem == lorem</h3>
+                <div class="listingblock">
+                  <div class="content">
+                    <pre class="highlight"><code class="language-ruby" data-lang="ruby">doc-0.rb[]</code></pre>
                   </div>
                 </div>
               </div>
-              <div class='sect2'>
-                <h3 id='_1_2_ipsum_ipsum'>1 &#8594; 2 ipsum == ipsum</h3>
-                <div class='listingblock'>
-                  <div class='content'>
-                    <pre class='highlight'>
-                      <code class='language-ruby' data-lang='ruby'>link:doc-1.rb[]</code>
-                    </pre>
+              <div class="sect2">
+                <h3 id="_1_2_ipsum_ipsum">1 → 2 ipsum == ipsum</h3>
+                <div class="listingblock">
+                  <div class="content">
+                    <pre class="highlight"><code class="language-ruby" data-lang="ruby">doc-1.rb[]</code></pre>
                   </div>
                 </div>
               </div>
-              <div class='sect2'>
-                <h3 id='_2_3_dolor_dolor'>2 &#8594; 3 dolor == dolor</h3>
-                <div class='listingblock'>
-                  <div class='content'>
-                    <pre class='highlight'>
-                      <code class='language-ruby' data-lang='ruby'>link:doc-2.rb[]</code>
-                    </pre>
+              <div class="sect2">
+                <h3 id="_2_3_dolor_dolor">2 → 3 dolor == dolor</h3>
+                <div class="listingblock">
+                  <div class="content">
+                    <pre class="highlight"><code class="language-ruby" data-lang="ruby">doc-2.rb[]</code></pre>
                   </div>
                 </div>
               </div>
@@ -375,7 +382,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -568,7 +576,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders liquid markup" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -613,7 +622,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders date time objects" do
-        expect(xmlpp(Asciidoctor.convert(input))).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
     context "Nested files support" do
@@ -753,11 +763,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders liquid markup" do
-        expect(
-          xmlpp(
-            Asciidoctor.convert(input)
-          )
-        ).to(eq(xmlpp(output)))
+        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+          .to(be_equivalent_to(output))
       end
     end
   end

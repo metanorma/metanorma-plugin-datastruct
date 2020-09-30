@@ -21,9 +21,10 @@ module Metanorma
   module Plugin
     module Datastruct
       # Base class for processing structured data blocks(yaml, json)
-      class BaseStructuredTextPreprocessor < Asciidoctor::Extensions::Preprocessor
-        BLOCK_START_REGEXP = /\{(.+?)\.\*,(.+),(.+)\}/
-        BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/
+      class BaseStructuredTextPreprocessor <
+        Asciidoctor::Extensions::Preprocessor
+        BLOCK_START_REGEXP = /\{(.+?)\.\*,(.+),(.+)\}/.freeze
+        BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
 
         def process(document, reader)
           input_lines = reader.readlines.to_enum
@@ -47,7 +48,9 @@ module Metanorma
         end
 
         def relative_file_path(document, file_path)
-          docfile_directory = File.dirname(document.attributes["docfile"] || ".")
+          docfile_directory = File.dirname(
+            document.attributes["docfile"] || "."
+          )
           document
             .path_resolver
             .system_path(file_path, docfile_directory)
@@ -110,10 +113,10 @@ module Metanorma
                               context_lines: transformed_liquid_lines,
                               context_items: context_items,
                               context_name: block_match[2])
-        rescue StandardError => exception
+        rescue StandardError => e
           document.logger
             .warn("Failed to parse #{config[:block_name]} \
-              block: #{exception.message}")
+              block: #{e.message}")
           []
         end
 
@@ -147,7 +150,8 @@ module Metanorma
           render_result.split("\n")
         end
 
-        def render_liquid_string(template_string:, context_items:, context_name:)
+        def render_liquid_string(template_string:, context_items:,
+                                 context_name:)
           liquid_template = Liquid::Template.parse(template_string)
           rendered_string = liquid_template
             .render(context_name => context_items,
