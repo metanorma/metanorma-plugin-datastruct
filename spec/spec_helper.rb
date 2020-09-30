@@ -1,7 +1,9 @@
 require "bundler/setup"
-require "mn-plugin-datastruct"
-require "rexml/document"
 require "byebug"
+require "metanorma"
+require "mn-plugin-datastruct"
+require "rspec/matchers"
+require "equivalent-xml"
 
 Dir[File.expand_path("./support/**/**/*.rb", __dir__)].each { |f| require f }
 
@@ -17,10 +19,12 @@ RSpec.configure do |config|
   end
 end
 
-def xmlpp(x)
-  s = ""
-  f = REXML::Formatters::Pretty.new(2)
-  f.compact = true
-  f.write(REXML::Document.new(x), s)
-  s
+def html_body_first_content_div(html)
+  Nokogiri::HTML(html).xpath('//div[@class="sect1"]')
+end
+
+def metanorma_process(input)
+  Metanorma::Input::Asciidoc
+    .new
+    .process(input, "test.adoc", :html)
 end

@@ -24,9 +24,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "asciidoctor", "~> 2.0.0"
+  spec.add_dependency "metanorma"
+  spec.add_dependency "relaton-cli"
+  spec.add_dependency "isodoc"
   spec.add_dependency "liquid"
 
   spec.add_development_dependency "byebug"
+  spec.add_development_dependency "equivalent-xml"
   spec.add_development_dependency "rake", "~> 12.0"
   spec.add_development_dependency "rspec", "~> 3.6"
   spec.add_development_dependency "rubocop", "= 0.54.0"
