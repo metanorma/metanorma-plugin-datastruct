@@ -17,7 +17,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         [{ "name" => "spaghetti",
            "desc" => "wheat noodles of 9mm diameter",
            "symbol" => "SPAG",
-           "symbol_def" => "the situation is message like spaghetti at a kid's meal" }]
+           "symbol_def" =>
+           "the situation is message like spaghetti at a kid's meal" }]
       end
       let(:input) do
         <<~TEXT
@@ -29,8 +30,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},my_context]
           ----
           {my_context.*,item,EOF}
@@ -41,24 +40,19 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-            <h2 id="_base">base</h2>
-            <div class="sectionbody">
-              <div class="dlist">
-                <dl>
-                  <dt class="hdlist1">spaghetti</dt>
-                  <dd>
-                    <p>wheat noodles of 9mm diameter</p>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
+          <variablelist>
+            <varlistentry>
+              <term>spaghetti</term>
+              <listitem>
+                <simpara>wheat noodles of 9mm diameter</simpara>
+              </listitem>
+            </varlistentry>
+          </variablelist>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//variablelist'))
           .to(be_equivalent_to(output))
       end
     end
@@ -77,8 +71,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},ar]
           ----
           {ar.*,s,EOS}
@@ -92,34 +84,23 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-            <h2 id="_base">base</h2>
-            <div class="sectionbody">
-              <div class="sect2">
-                <h3 id="_0_lorem">0 lorem</h3>
-                <div class="paragraph">
-                  <p>This section is about lorem.</p>
-                </div>
-              </div>
-              <div class="sect2">
-                <h3 id="_1_ipsum">1 ipsum</h3>
-                <div class="paragraph">
-                  <p>This section is about ipsum.</p>
-                </div>
-              </div>
-              <div class="sect2">
-                <h3 id="_2_dolor">2 dolor</h3>
-                <div class="paragraph">
-                  <p>This section is about dolor.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <section xml:id="_0_lorem">
+            <title>0 lorem</title>
+            <simpara>This section is about lorem.</simpara>
+          </section>
+          <section xml:id="_1_ipsum">
+            <title>1 ipsum</title>
+            <simpara>This section is about ipsum.</simpara>
+          </section>
+          <section xml:id="_2_dolor">
+            <title>2 dolor</title>
+            <simpara>This section is about dolor.</simpara>
+          </section>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//section'))
           .to(be_equivalent_to(output))
       end
     end
@@ -138,8 +119,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},my_item]
           ----
           === {my_item.name}
@@ -150,22 +129,15 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-            <h2 id="_base">base</h2>
-            <div class="sectionbody">
-              <div class="sect2">
-                <h3 id="_lorem_ipsum">Lorem ipsum</h3>
-                <div class="paragraph">
-                  <p>dolor sit amet</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <section xml:id="_lorem_ipsum">
+            <title>Lorem ipsum</title>
+            <simpara>dolor sit amet</simpara>
+          </section>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//section'))
           .to(be_equivalent_to(output))
       end
     end
@@ -184,8 +156,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},my_item]
           ----
           {my_item.*,key,EOI}
@@ -199,28 +169,19 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='sect2'>
-                <h3 id='_name'>name</h3>
-                <div class='paragraph'>
-                  <p>Lorem ipsum</p>
-                </div>
-              </div>
-              <div class='sect2'>
-                <h3 id='_desc'>desc</h3>
-                <div class='paragraph'>
-                  <p>dolor sit amet</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <section xml:id="_name">
+            <title>name</title>
+            <simpara>Lorem ipsum</simpara>
+          </section>
+          <section xml:id="_desc">
+            <title>desc</title>
+            <simpara>dolor sit amet</simpara>
+          </section>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//section'))
           .to(be_equivalent_to(output))
       end
     end
@@ -241,8 +202,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},ar]
           ----
           {ar.*,item,EOF}
@@ -259,52 +218,47 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-            <h2 id="_base">base</h2>
-            <div class="sectionbody">
-              <div class="dlist">
-                <dl>
-                  <dt class="hdlist1">Lorem</dt>
-                  <dd>
-                    <p>ipsum</p>
-                    <div class="ulist">
-                      <ul>
-                        <li>
-                          <p>Lorem: 2</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </dd>
-                  <dt class="hdlist1">dolor</dt>
-                  <dd>
-                    <p>sit</p>
-                  </dd>
-                  <dt class="hdlist1">amet</dt>
-                  <dd>
-                    <p>lorem</p>
-                    <div class="ulist">
-                      <ul>
-                        <li>
-                          <p>amet: 2</p>
-                        </li>
-                        <li>
-                          <p>amet: 4</p>
-                        </li>
-                        <li>
-                          <p>amet: 6</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
+          <variablelist>
+            <varlistentry>
+              <term>Lorem</term>
+              <listitem>
+                <simpara>ipsum</simpara>
+                <itemizedlist>
+                  <listitem>
+                    <simpara>Lorem: 2</simpara>
+                  </listitem>
+                </itemizedlist>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>dolor</term>
+              <listitem>
+                <simpara>sit</simpara>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>amet</term>
+              <listitem>
+                <simpara>lorem</simpara>
+                <itemizedlist>
+                  <listitem>
+                    <simpara>amet: 2</simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>amet: 4</simpara>
+                  </listitem>
+                  <listitem>
+                    <simpara>amet: 6</simpara>
+                  </listitem>
+                </itemizedlist>
+              </listitem>
+            </varlistentry>
+          </variablelist>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//variablelist'))
           .to(be_equivalent_to(output))
       end
     end
@@ -324,8 +278,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},#{extention}]
           ------
           First item is {#{extention}.items[0]}.
@@ -336,7 +288,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
           [source,ruby]
           ----
-          {#{extention}.prefix}{s.#}.rb[]
+          include::{#{extention}.prefix}{s.#}.rb[]
           ----
 
           {EOS}
@@ -345,44 +297,26 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-            <h2 id="_base">base</h2>
-            <div class="sectionbody">
-              <div class="paragraph">
-                <p>First item is lorem.
-                  Last item is dolor.</p>
-              </div>
-              <div class="sect2">
-                <h3 id="_0_1_lorem_lorem">0 → 1 lorem == lorem</h3>
-                <div class="listingblock">
-                  <div class="content">
-                    <pre class="highlight"><code class="language-ruby" data-lang="ruby">doc-0.rb[]</code></pre>
-                  </div>
-                </div>
-              </div>
-              <div class="sect2">
-                <h3 id="_1_2_ipsum_ipsum">1 → 2 ipsum == ipsum</h3>
-                <div class="listingblock">
-                  <div class="content">
-                    <pre class="highlight"><code class="language-ruby" data-lang="ruby">doc-1.rb[]</code></pre>
-                  </div>
-                </div>
-              </div>
-              <div class="sect2">
-                <h3 id="_2_3_dolor_dolor">2 → 3 dolor == dolor</h3>
-                <div class="listingblock">
-                  <div class="content">
-                    <pre class="highlight"><code class="language-ruby" data-lang="ruby">doc-2.rb[]</code></pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <section xml:id="_0_1_lorem_lorem">
+            <title>0 → 1 lorem == lorem</title>
+            <programlisting language="ruby" linenumbering="unnumbered">Unresolved directive in test.adoc - include::doc-0.rb[]
+            </programlisting>
+          </section>
+          <section xml:id="_1_2_ipsum_ipsum">
+            <title>1 → 2 ipsum == ipsum</title>
+            <programlisting language="ruby" linenumbering="unnumbered">Unresolved directive in test.adoc - include::doc-1.rb[]
+            </programlisting>
+          </section>
+          <section xml:id="_2_3_dolor_dolor">
+            <title>2 → 3 dolor == dolor</title>
+            <programlisting language="ruby" linenumbering="unnumbered">Unresolved directive in test.adoc - include::doc-2.rb[]
+            </programlisting>
+          </section>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//section'))
           .to(be_equivalent_to(output))
       end
     end
@@ -403,8 +337,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},ar]
           ----
           {ar.*,item,EOF}
@@ -421,13 +353,11 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         TEXT
       end
       let(:output) do
-        <<~TEXT
-          #{File.read(File.expand_path('../../assets/codes_table.html', __dir__))}
-        TEXT
+        File.read(File.expand_path('../../assets/codes_table.xml', __dir__))
       end
 
       it "correctly renders input" do
-        expect(Asciidoctor.convert(input) + "\n").to(eq(output))
+        expect(Nokogiri::XML(metanorma_process(input)).to_s).to(be_equivalent_to(output))
       end
     end
 
@@ -445,8 +375,10 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               "target_script" => "Latn",
               "system" =>
               { "id" => "2002",
-                "specification" => "Academica Sinica -- Chinese Tongyong Pinyin (2002)" },
-              "notes" => "NOTE: OGC 11-122r1 code `zho_Hani2Latn_AcadSin_2002`" } } }
+                "specification" =>
+                "Academica Sinica -- Chinese Tongyong Pinyin (2002)" },
+              "notes" =>
+              "NOTE: OGC 11-122r1 code `zho_Hani2Latn_AcadSin_2002`" } } }
       end
       let(:input) do
         <<~TEXT
@@ -457,8 +389,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :novalid:
           :no-isobib:
           :imagesdir: spec/assets
-
-          == base
 
           [#{extention}2text,#{example_file},authorities]
           ----
@@ -476,57 +406,47 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-          <h2 id="_base">base</h2>
-          <div class="sectionbody">
-          <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-          </colgroup>
-          <thead>
-          <tr>
-          <th class="tableblock halign-left valign-top">Script conversion system authority code</th>
-          <th class="tableblock halign-left valign-top">Name in English</th>
-          <th class="tableblock halign-left valign-top">Notes</th>
-          <th class="tableblock halign-left valign-top">Name en</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-          <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-          <p>acadsin-zho-hani-latn-2002</p>
-          </div></div></td>
-          <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-          <p>acadsin-zho-hani-latn-2002</p>
-          </div></div></td>
-          <td class="tableblock halign-left valign-top"><div class="content"><div class="admonitionblock note">
-          <table>
-          <tr>
-          <td class="icon">
-          <div class="title">Note</div>
-          </td>
-          <td class="content">
-          OGC 11-122r1 code <code>zho_Hani2Latn_AcadSin_2002</code>
-          </td>
-          </tr>
-          </table>
-          </div></div></td>
-          <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-          <p>Academica Sinica&#8201;&#8212;&#8201;Chinese Tongyong Pinyin (2002)</p>
-          </div></div></td>
-          </tr>
-          </tbody>
-          </table>
-          </div>
-          </div>
+          <informaltable frame="all" rowsep="1" colsep="1">
+            <tgroup cols="4">
+              <colspec colname="col_1" colwidth="25*" />
+              <colspec colname="col_2" colwidth="25*" />
+              <colspec colname="col_3" colwidth="25*" />
+              <colspec colname="col_4" colwidth="25*" />
+              <thead>
+                <row>
+                  <entry align="left" valign="top">Script conversion system authority code</entry>
+                  <entry align="left" valign="top">Name in English</entry>
+                  <entry align="left" valign="top">Notes</entry>
+                  <entry align="left" valign="top">Name en</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry align="left" valign="top">
+                    <simpara>acadsin-zho-hani-latn-2002</simpara>
+                  </entry>
+                  <entry align="left" valign="top">
+                    <simpara>acadsin-zho-hani-latn-2002</simpara>
+                  </entry>
+                  <entry align="left" valign="top">
+                    <note>
+                      <simpara>OGC 11-122r1 code <literal>zho_Hani2Latn_AcadSin_2002</literal>
+                      </simpara>
+                    </note>
+                  </entry>
+                  <entry align="left" valign="top">
+                    <simpara>Academica Sinica&#8201;&#8212;&#8201;Chinese Tongyong Pinyin (2002)</simpara>
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
         TEXT
       end
 
       it "correctly renders input" do
-        expect(Asciidoctor.convert(input) + "\n").to(eq(output))
+        expect(xml_string_conent(metanorma_process(input), '//informaltable'))
+          .to(be_equivalent_to(output))
       end
     end
 
@@ -546,8 +466,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},my_context]
           ----
           {% for item in my_context %}
@@ -561,29 +479,25 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='paragraph'>
-                <p>ONE 3</p>
-              </div>
-              <div class='paragraph'>
-                <p>TWO 3</p>
-              </div>
-            </div>
-          </div>
+          <simpara>ONE
+          3</simpara>
+          <simpara>TWO
+            3</simpara
         TEXT
       end
 
       it "renders liquid markup" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//simpara'))
           .to(be_equivalent_to(output))
       end
     end
 
     context "Date time objects support" do
       let(:example_content) do
-        { "date" => Date.parse("1889-09-28"), "time" => Time.gm(2020, 10, 15, 5, 34) }
+        {
+          "date" => Date.parse("1889-09-28"),
+          "time" => Time.gm(2020, 10, 15, 5, 34),
+        }
       end
       let(:input) do
         <<~TEXT
@@ -595,8 +509,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{example_file},my_context]
           ----
           {{my_context.time}}
@@ -607,25 +519,17 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class='sect1'>
-            <h2 id='_base'>base</h2>
-            <div class='sectionbody'>
-              <div class='paragraph'>
-                <p>2020-10-15 05:34:00 UTC</p>
-              </div>
-              <div class='paragraph'>
-                <p>1889-09-28</p>
-              </div>
-            </div>
-          </div>
+          <simpara>2020-10-15 05:34:00 UTC</simpara>
+          <simpara>1889-09-28</simpara>
         TEXT
       end
 
-      it "renders date time objects" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+      it "renders liquid markup" do
+        expect(xml_string_conent(metanorma_process(input), '//simpara'))
           .to(be_equivalent_to(output))
       end
     end
+
     context "Nested files support" do
       let(:example_content) do
         {
@@ -667,8 +571,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          == base
-
           [#{extention}2text,#{parent_file},paths]
           ----
           {% for path in paths %}
@@ -680,7 +582,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           [#{extention}2text,{{ path }},data]
           --
 
-          {{ data[name] | split: "-" | last }}: {{ data[name] }}
+          == {{ data[name] | split: "-" | last }}: {{ data[name] }}
 
           --
 
@@ -694,7 +596,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           [#{extention}2text,{{ path }},data]
           --
 
-          {{ data[name] }}
+          == {{ data[name] }}
 
           --
 
@@ -707,35 +609,38 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
       let(:output) do
         <<~TEXT
-          <div class="sect1">
-            <h2 id="_base">base</h2>
-            <div class="sectionbody">
-              <div class="paragraph">
-                <p>main: nested file-main</p>
-              </div>
-              <div class="paragraph">
-                <p>main: nested description-main</p>
-              </div>
-              <div class="paragraph">
-                <p>nested one-main</p>
-              </div>
-              <div class="paragraph">
-                <p>nested two-main</p>
-              </div>
-              <div class="paragraph">
-                <p>main: nested2 name-main</p>
-              </div>
-              <div class="paragraph">
-                <p>main: nested2 description-main</p>
-              </div>
-              <div class="paragraph">
-                <p>nested2 one-main</p>
-              </div>
-              <div class="paragraph">
-                <p>nested2 two-main</p>
-              </div>
-            </div>
-          </div>
+          <section xml:id="_main_nested_file_main">
+              <title>main: nested file-main</title>
+
+            </section>
+            <section xml:id="_main_nested_description_main">
+              <title>main: nested description-main</title>
+
+            </section>
+            <section xml:id="_nested_one_main">
+              <title>nested one-main</title>
+
+            </section>
+            <section xml:id="_nested_two_main">
+              <title>nested two-main</title>
+
+            </section>
+            <section xml:id="_main_nested2_name_main">
+              <title>main: nested2 name-main</title>
+
+            </section>
+            <section xml:id="_main_nested2_description_main">
+              <title>main: nested2 description-main</title>
+
+            </section>
+            <section xml:id="_nested2_one_main">
+              <title>nested2 one-main</title>
+
+            </section>
+            <section xml:id="_nested2_two_main">
+              <title>nested2 two-main</title>
+
+            </section>
         TEXT
       end
       let(:file_list) do
@@ -763,7 +668,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders liquid markup" do
-        expect(html_body_first_content_div(metanorma_process(input)).to_s)
+        expect(xml_string_conent(metanorma_process(input), '//section'))
           .to(be_equivalent_to(output))
       end
     end

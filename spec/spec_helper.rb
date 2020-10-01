@@ -19,12 +19,12 @@ RSpec.configure do |config|
   end
 end
 
-def html_body_first_content_div(html)
-  Nokogiri::HTML(html).xpath('//div[@class="sect1"]')
+def xml_string_conent(xml, xpath)
+  Nokogiri::HTML(xml).xpath(xpath).to_s
 end
 
 def metanorma_process(input)
   Metanorma::Input::Asciidoc
     .new
-    .process(input, "test.adoc", :html)
+    .process(input, "test.adoc", :docbook)
 end
