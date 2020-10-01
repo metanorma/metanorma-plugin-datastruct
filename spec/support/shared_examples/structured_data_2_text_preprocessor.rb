@@ -52,7 +52,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//variablelist'))
+        expect(xml_string_conent(metanorma_process(input), "//variablelist"))
           .to(be_equivalent_to(output))
       end
     end
@@ -100,7 +100,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//section'))
+        expect(xml_string_conent(metanorma_process(input), "//section"))
           .to(be_equivalent_to(output))
       end
     end
@@ -137,7 +137,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//section'))
+        expect(xml_string_conent(metanorma_process(input), "//section"))
           .to(be_equivalent_to(output))
       end
     end
@@ -181,7 +181,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//section'))
+        expect(xml_string_conent(metanorma_process(input), "//section"))
           .to(be_equivalent_to(output))
       end
     end
@@ -258,7 +258,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//variablelist'))
+        expect(xml_string_conent(metanorma_process(input), "//variablelist"))
           .to(be_equivalent_to(output))
       end
     end
@@ -316,7 +316,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//section'))
+        expect(xml_string_conent(metanorma_process(input), "//section"))
           .to(be_equivalent_to(output))
       end
     end
@@ -353,7 +353,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         TEXT
       end
       let(:output) do
-        File.read(File.expand_path('../../assets/codes_table.xml', __dir__))
+        File.read(File.expand_path("../../assets/codes_table.xml", __dir__))
       end
 
       it "correctly renders input" do
@@ -445,7 +445,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "correctly renders input" do
-        expect(xml_string_conent(metanorma_process(input), '//informaltable'))
+        expect(xml_string_conent(metanorma_process(input), "//informaltable"))
           .to(be_equivalent_to(output))
       end
     end
@@ -487,7 +487,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders liquid markup" do
-        expect(xml_string_conent(metanorma_process(input), '//simpara'))
+        expect(xml_string_conent(metanorma_process(input), "//simpara"))
           .to(be_equivalent_to(output))
       end
     end
@@ -525,7 +525,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders liquid markup" do
-        expect(xml_string_conent(metanorma_process(input), '//simpara'))
+        expect(xml_string_conent(metanorma_process(input), "//simpara"))
           .to(be_equivalent_to(output))
       end
     end
@@ -668,7 +668,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       end
 
       it "renders liquid markup" do
-        expect(xml_string_conent(metanorma_process(input), '//section'))
+        expect(xml_string_conent(metanorma_process(input), "//section"))
           .to(be_equivalent_to(output))
       end
     end
