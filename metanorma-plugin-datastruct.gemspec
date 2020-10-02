@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "metanorma/plugin/datastruct/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "mn-plugin-datastruct"
+  spec.name          = "metanorma-plugin-datastruct"
   spec.version       = Metanorma::Plugin::Datastruct::VERSION
   spec.authors       = ["Ribose Inc."]
   spec.email         = ["open.source@ribose.com"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "plugins for data processing"
   spec.description   = "plugins for data processing"
 
-  spec.homepage      = "https://github.com/metanorma/mn-plugin-datastruct"
+  spec.homepage      = "https://github.com/metanorma/metanorma-plugin-datastruct"
   spec.license       = "BSD-2-Clause"
 
   # Specify which files should be added to the gem when it is released.

@@ -1,6 +1,6 @@
 require "bundler/setup"
 require "asciidoctor"
-require "mn-plugin-datastruct"
+require "metanorma-plugin-datastruct"
 
 # Register datastruct blocks as first preprocessors in line in order
 # to test properly with metanorma-standoc

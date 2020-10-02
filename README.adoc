@@ -8,7 +8,7 @@ Metanorma plugin that allows you to access static data structures like JSON, YAM
 
 [source,console]
 ----
-$ gem install mn-plugin-datastruct
+$ gem install metanorma-plugin-datastruct
 ----
 
 == Documentation
