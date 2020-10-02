@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ribose Inc."]
   spec.email         = ["open.source@ribose.com"]
 
-  spec.summary       = "plugins for data processing"
-  spec.description   = "plugins for data processing"
+  spec.summary       = "Metanorma plugin for yaml2text and json2text"
+  spec.description   = "Metanorma plugin for yaml2text and json2text"
 
   spec.homepage      = "https://github.com/metanorma/metanorma-plugin-datastruct"
   spec.license       = "BSD-2-Clause"
