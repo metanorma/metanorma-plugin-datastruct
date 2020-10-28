@@ -112,7 +112,7 @@ module Metanorma
           parse_context_block(document: document,
                               context_lines: transformed_liquid_lines,
                               context_items: context_items,
-                              context_name: block_match[2])
+                              context_name: block_match[2].strip)
         rescue StandardError => e
           document.logger
             .warn("Failed to parse #{config[:block_name]} \
