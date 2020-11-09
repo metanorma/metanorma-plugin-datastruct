@@ -13,7 +13,7 @@ $ gem install metanorma-plugin-datastruct
 
 == Usage
 
-In order to use macroses(yaml2text, json2text) you need to register them as Asciidoctor extentions in metanorma.
+In order to use the macros in Metanorma, add the gem gem 'metanorma-plugin-datastruct' in your Gemfile. Or have the gem installed, and Metanorma can use them automatically via the extension :plugin: datastruct.
 
 EXAMPLE:
 
