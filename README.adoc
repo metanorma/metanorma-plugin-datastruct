@@ -15,24 +15,6 @@ $ gem install metanorma-plugin-datastruct
 
 In order to use the macros in Metanorma, add the gem gem 'metanorma-plugin-datastruct' in your Gemfile. Or have the gem installed, and Metanorma can use them automatically via the extension :plugin: datastruct.
 
-EXAMPLE:
-
-[source,ruby]
---
-require "metanorma-plugin-datastruct"
-
-module Asciidoctor
-  module Standoc
-    class Converter
-      Asciidoctor::Extensions.register do
-        preprocessor Metanorma::Plugin::Datastruct::Json2TextPreprocessor
-        preprocessor Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor
-      end
-    end
-  end
-end
---
-
 === Expressions
 
 Currently, there are 2 plugins available: `yaml2text` and `json2text`. As states from the name, `yaml2text` allows to load yaml file and use it in expressions, `json2text` works with json files.
