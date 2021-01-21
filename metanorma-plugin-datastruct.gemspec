@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "metanorma"
   spec.add_dependency "relaton-cli"
   spec.add_dependency "isodoc"
-  spec.add_dependency "liquid"
+  spec.add_dependency "liquid", "~> 4"
 
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "equivalent-xml"
