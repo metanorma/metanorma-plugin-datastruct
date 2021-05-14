@@ -42,7 +42,8 @@ module Metanorma
           YAML.safe_load(
             File.read(relative_file_path(document, file_path), encoding: "UTF-8"),
             [Date, Time],
-            aliases: true
+            [],
+            true
           )
         end
       end
