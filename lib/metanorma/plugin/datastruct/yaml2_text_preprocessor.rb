@@ -37,11 +37,13 @@ module Metanorma
 
         protected
 
+        # https://ruby-doc.org/stdlib-2.5.1/libdoc/psych/rdoc/Psych.html#method-c-safe_load
         def content_from_file(document, file_path)
           YAML.safe_load(
-            File.read(relative_file_path(document, file_path),
-                      encoding: "UTF-8"),
-            [Date, Time]
+            File.read(relative_file_path(document, file_path), encoding: "UTF-8"),
+            [Date, Time],
+            [],
+            true
           )
         end
       end

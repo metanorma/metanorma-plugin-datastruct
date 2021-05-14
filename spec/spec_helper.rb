@@ -34,7 +34,7 @@ end
 BLANK_HDR = <<~"HDR".freeze
   <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
   <?xml version="1.0" encoding="UTF-8"?><html><body>
-  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="1.6.0">
+  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}">
   <bibdata type="standard">
   <title language="en" format="text/plain">Document title</title>
     <language>en</language>
@@ -63,4 +63,8 @@ def metanorma_process(input)
   Metanorma::Input::Asciidoc
     .new
     .process(input, "test.adoc", :standoc)
+end
+
+def assets_path(path)
+  File.join(File.expand_path("./assets", __dir__), path)
 end
