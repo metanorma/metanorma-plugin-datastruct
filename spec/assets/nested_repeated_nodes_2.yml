@@ -1,0 +1,10 @@
+#Finland
+#Amateur stations and
+#experimental stations:
+#OF, OG, OH, OI or OJ followed by a digit and a group of not more than 4 characters, the last of which shall be a letter
+
+groups:
+  amateur: &general
+    regex: 'O[F-J][:upper:]{5,10}'
+
+  experimental: *general
