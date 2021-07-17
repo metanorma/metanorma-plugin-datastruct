@@ -1,0 +1,30 @@
+= Date and time -- Codes for calendar systems
+:docnumber: 34300
+:copyright-year: 2019
+:language: en
+:doctype: standard
+:edition: 1
+:status: working-draft
+:revdate: 2019-07-05
+:published-date: 2019-07-05
+:script: Latn
+:technical-committee: DATETIME
+:fullname: Ronald Tse
+:surname: Tse
+:givenname: Ronald
+:fullname_2: Jeffrey Lau
+:surname_2: Lau
+:givenname_2: Jeffrey
+:docfile: cc-34300.adoc
+:imagesdir: images
+:mn-document-class: csd
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+:data-uri-image:
+
+[yaml2text,broken.yml, context]
+....
+{% for item in context %}
+{{ item }}
+{% endfor %}
+....
