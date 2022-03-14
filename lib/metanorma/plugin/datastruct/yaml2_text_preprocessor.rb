@@ -41,9 +41,9 @@ module Metanorma
         def content_from_file(document, file_path)
           YAML.safe_load(
             File.read(relative_file_path(document, file_path), encoding: "UTF-8"),
-            [Date, Time],
-            [],
-            true
+            permitted_classes: [Date, Time],
+            permitted_symbols: [],
+            aliases: true
           )
         end
       end

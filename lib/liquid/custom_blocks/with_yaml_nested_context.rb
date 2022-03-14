@@ -10,9 +10,9 @@ module Liquid
         context_file = context[@context_file_variable].to_s.strip
         context[@context_name] = YAML.safe_load(
           File.read(context_file, encoding: "utf-8"),
-          [Date, Time],
-          [],
-          true
+          permitted_classes: [Date, Time],
+          permitted_symbols: [],
+          aliases: true
         )
         super
       end
