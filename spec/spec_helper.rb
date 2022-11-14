@@ -14,7 +14,6 @@ require "rspec/matchers"
 require "equivalent-xml"
 require "metanorma"
 require "metanorma/standoc"
-require "rexml/document"
 require "byebug"
 
 Dir[File.expand_path("./support/**/**/*.rb", __dir__)].each { |f| require f }
