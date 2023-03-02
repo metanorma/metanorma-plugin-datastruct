@@ -7,6 +7,7 @@ require "liquid/custom_blocks/key_iterator"
 require "liquid/custom_blocks/with_yaml_nested_context"
 require "liquid/custom_blocks/with_json_nested_context"
 require "liquid/custom_filters/values"
+require "liquid/custom_filters/replace_regex"
 
 Liquid::Template.register_tag("keyiterator", Liquid::CustomBlocks::KeyIterator)
 Liquid::Template
