@@ -73,7 +73,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
 
     it "correctly renders input" do
       expect(xml_string_conent(metanorma_process(input)))
-        .to(be_equivalent_to(output))
+        .to(be_equivalent_to(xml_string_conent(output)))
     end
   end
 end

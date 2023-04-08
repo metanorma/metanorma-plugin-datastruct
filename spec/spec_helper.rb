@@ -31,8 +31,6 @@ RSpec.configure do |config|
 end
 
 BLANK_HDR = <<~"HDR".freeze
-  <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-  <?xml version="1.0" encoding="UTF-8"?><html><body>
   <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}">
   <bibdata type="standard">
   <title language="en" format="text/plain">Document title</title>
@@ -43,9 +41,23 @@ BLANK_HDR = <<~"HDR".freeze
       <from>#{Time.new.year}</from>
     </copyright>
     <ext>
-    <doctype>article</doctype>
+    <doctype>standard</doctype>
     </ext>
   </bibdata>
+    <metanorma-extension>
+    <presentation-metadata>
+      <name>TOC Heading Levels</name>
+      <value>2</value>
+    </presentation-metadata>
+    <presentation-metadata>
+      <name>HTML TOC Heading Levels</name>
+      <value>2</value>
+    </presentation-metadata>
+    <presentation-metadata>
+      <name>DOC TOC Heading Levels</name>
+      <value>2</value>
+    </presentation-metadata>
+  </metanorma-extension>
 HDR
 
 def strip_guid(xml)
@@ -54,8 +66,29 @@ def strip_guid(xml)
     .gsub(%r{ target="_[^"]+"}, ' target="_"')
 end
 
+def xmlpp(xml)
+  c = HTMLEntities.new
+  xml &&= xml.split(/(&\S+?;)/).map do |n|
+    if /^&\S+?;$/.match?(n)
+      c.encode(c.decode(n), :hexadecimal)
+    else n
+    end
+  end.join
+  xsl = <<~XSL
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+      <!--<xsl:strip-space elements="*"/>-->
+      <xsl:template match="/">
+        <xsl:copy-of select="."/>
+      </xsl:template>
+    </xsl:stylesheet>
+  XSL
+  Nokogiri::XSLT(xsl).transform(Nokogiri::XML(xml, &:noblanks))
+    .to_xml(indent: 2, encoding: "UTF-8")
+end
+
 def xml_string_conent(xml)
-  strip_guid(Nokogiri::HTML(xml).to_s)
+  strip_guid(xmlpp(xml))
 end
 
 def metanorma_process(input)
