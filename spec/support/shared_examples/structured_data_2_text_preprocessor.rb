@@ -344,7 +344,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
       context "Array of language codes" do
         let(:example_content) do
           YAML.safe_load(
-            File.read(File.expand_path("../../assets/codes.yml", __dir__))
+            File.read(File.expand_path("../../assets/codes.yml", __dir__)),
           )
         end
         let(:input) do
@@ -691,7 +691,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         end
 
         after do
-          file_list.keys.each do |file|
+          file_list.each_key do |file|
             FileUtils.rm_rf(file)
           end
         end
@@ -726,7 +726,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         end
 
         let(:abc_content) { transform_to_type(%w[lorem ipsum dolor]) }
-        let(:def_content) { transform_to_type({ 'a' => 'b' }) }
+        let(:def_content) { transform_to_type({ "a" => "b" }) }
 
         let(:file_content) do
           <<~CONTENT
@@ -786,9 +786,9 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
         it "correctly renders output" do
           file_content = File.read("main.adoc")
-          output = metanorma_process(file_content)
+          actual_output = xml_string_conent(metanorma_process(file_content))
 
-          expect(xml_string_conent(output)).to(be_equivalent_to(expected_output))
+          expect(actual_output).to(be_equivalent_to(expected_output))
         end
       end
     end

@@ -207,7 +207,9 @@ RSpec.describe Metanorma::Plugin::Datastruct::SourceExtractor do
       subject.send(:relative_file_path, document, "file.adoc")
     end
 
-    it { expect(relative_file_path).to include("/metanorma/metanorma-plugin-datastruct/file.adoc") }
+    let(:expected_output) { "/metanorma-plugin-datastruct/file.adoc" }
+
+    it { expect(relative_file_path).to include(expected_output) }
   end
 
   describe "#read_section" do

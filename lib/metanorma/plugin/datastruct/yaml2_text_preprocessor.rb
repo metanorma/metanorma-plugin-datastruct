@@ -43,7 +43,7 @@ module Metanorma
             File.read(relative_file_path(document, file_path), encoding: "UTF-8"),
             permitted_classes: [Date, Time],
             permitted_symbols: [],
-            aliases: true
+            aliases: true,
           )
         end
 
@@ -52,7 +52,7 @@ module Metanorma
             document.attributes["source_blocks"][anchor],
             permitted_classes: [Date, Time],
             permitted_symbols: [],
-            aliases: true
+            aliases: true,
           )
         end
       end

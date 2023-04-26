@@ -14,7 +14,7 @@ module Metanorma
         # examples:
         #   - [id=abc]
         #   - [source,id="abc"]
-        ANCHOR_REGEX_3 = /^\[(.+,)?id=['"]?(?<id>[^,\]'"]*)['"]?[,\]]/.freeze
+        ANCHOR_REGEX_3 = /^\[(?:.+,)?id=['"]?(?<id>[^,\]'"]*)['"]?[,\]]/.freeze
 
         def initialize(document, input_lines)
           @document = document
@@ -24,7 +24,7 @@ module Metanorma
         end
 
         def self.extract(document, input_lines)
-          self.new(document, input_lines).extract
+          new(document, input_lines).extract
         end
 
         def extract
@@ -33,12 +33,11 @@ module Metanorma
           loop do
             line = lines.next
 
-            if /^embed::|^include::/.match(line.strip)
-              # Extract source_blocks from the file included or embeded
+            if /^embed::|^include::/.match?(line.strip)
               file_lines = read(filename(@document, line))
               SourceExtractor.extract(@document, file_lines)
             elsif m = match_anchor(line)
-              @document.attributes["source_blocks"][m[:id]] = read_section(lines)
+              @document.attributes["source_blocks"][m[:id]] = read_section lines
             end
           end
         end

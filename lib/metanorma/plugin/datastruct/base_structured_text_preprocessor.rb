@@ -30,9 +30,14 @@ module Metanorma
 
         def process(document, reader)
           input_lines = reader.readlines
-          Metanorma::Plugin::Datastruct::SourceExtractor.extract(document, input_lines)
+          Metanorma::Plugin::Datastruct::SourceExtractor.extract(
+            document,
+            input_lines,
+          )
 
-          Asciidoctor::Reader.new(processed_lines(document, input_lines.to_enum))
+          Asciidoctor::Reader.new(
+            processed_lines(document, input_lines.to_enum),
+          )
         end
 
         protected
