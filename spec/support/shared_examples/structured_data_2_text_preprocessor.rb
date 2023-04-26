@@ -571,11 +571,11 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           }
         end
         let(:parent_file) { "parent_file.#{extention}" }
-        let(:parent_file_content) { [nested_file, nested_file_2] }
-        let(:parent_file_2) { "parent_file_2.#{extention}" }
-        let(:parent_file_2_content) { ["name", "description"] }
-        let(:parent_file_3) { "parent_file_3.#{extention}" }
-        let(:parent_file_3_content) { ["one", "two"] }
+        let(:parent_file_content) { [nested_file, nested_file2] }
+        let(:parent_file2) { "parent_file2.#{extention}" }
+        let(:parent_file2_content) { ["name", "description"] }
+        let(:parent_file3) { "parent_file_3.#{extention}" }
+        let(:parent_file3_content) { ["one", "two"] }
         let(:nested_file) { "nested_file.#{extention}" }
         let(:nested_file_content) do
           {
@@ -585,8 +585,8 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             "two" => "nested two-main",
           }
         end
-        let(:nested_file_2) { "nested_file_2.#{extention}" }
-        let(:nested_file_2_content) do
+        let(:nested_file2) { "nested_file_2.#{extention}" }
+        let(:nested_file2_content) do
           {
             "name" => "nested2 name-main",
             "description" => "nested2 description-main",
@@ -608,7 +608,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             ----
             {% for path in paths %}
 
-            [#{extention}2text,#{parent_file_2},attribute_names]
+            [#{extention}2text,#{parent_file2},attribute_names]
             ---
             {% for name in attribute_names %}
 
@@ -622,7 +622,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             {% endfor %}
             ---
 
-            [#{extention}2text,#{parent_file_3},attribute_names]
+            [#{extention}2text,#{parent_file3},attribute_names]
             ---
             {% for name in attribute_names %}
 
@@ -675,10 +675,10 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         let(:file_list) do
           {
             parent_file => parent_file_content,
-            parent_file_2 => parent_file_2_content,
-            parent_file_3 => parent_file_3_content,
+            parent_file2 => parent_file2_content,
+            parent_file3 => parent_file3_content,
             nested_file => nested_file_content,
-            nested_file_2 => nested_file_2_content,
+            nested_file2 => nested_file2_content,
           }
         end
 
