@@ -46,6 +46,15 @@ module Metanorma
             aliases: true
           )
         end
+
+        def content_from_anchor(document, anchor)
+          YAML.safe_load(
+            document.attributes["source_blocks"][anchor],
+            permitted_classes: [Date, Time],
+            permitted_symbols: [],
+            aliases: true
+          )
+        end
       end
     end
   end
