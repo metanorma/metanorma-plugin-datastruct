@@ -41,6 +41,10 @@ module Metanorma
           JSON.parse(File.read(relative_file_path(document, file_path),
                                encoding: "UTF-8"))
         end
+
+        def content_from_anchor(document, anchor)
+          JSON.parse(document.attributes["source_blocks"][anchor])
+        end
       end
     end
   end

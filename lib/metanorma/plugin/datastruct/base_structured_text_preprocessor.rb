@@ -8,6 +8,7 @@ require "liquid/custom_blocks/with_yaml_nested_context"
 require "liquid/custom_blocks/with_json_nested_context"
 require "liquid/custom_filters/values"
 require "liquid/custom_filters/replace_regex"
+require "metanorma/plugin/datastruct/source_extractor"
 
 Liquid::Template.register_tag("keyiterator", Liquid::CustomBlocks::KeyIterator)
 Liquid::Template
@@ -28,14 +29,25 @@ module Metanorma
         BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
 
         def process(document, reader)
-          input_lines = reader.readlines.to_enum
-          Asciidoctor::Reader.new(processed_lines(document, input_lines))
+          input_lines = reader.readlines
+          Metanorma::Plugin::Datastruct::SourceExtractor.extract(
+            document,
+            input_lines,
+          )
+
+          Asciidoctor::Reader.new(
+            processed_lines(document, input_lines.to_enum),
+          )
         end
 
         protected
 
         def content_from_file(_document, _file_path)
           raise ArgumentError, "Implement `content_from_file` in your class"
+        end
+
+        def content_from_anchor(_document, _file_path)
+          raise ArgumentError, "Implement `content_from_anchor` in your class"
         end
 
         private
@@ -109,7 +121,13 @@ module Metanorma
         def parse_template(document, current_block, block_match)
           transformed_liquid_lines = current_block
             .map(&method(:transform_line_liquid))
-          context_items = content_from_file(document, block_match[1])
+
+          context_items = if block_match[1].start_with?("#")
+                            content_from_anchor(document, block_match[1][1..-1])
+                          else
+                            content_from_file(document, block_match[1])
+                          end
+
           parse_context_block(document: document,
                               context_lines: transformed_liquid_lines,
                               context_items: context_items,

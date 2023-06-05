@@ -43,7 +43,16 @@ module Metanorma
             File.read(relative_file_path(document, file_path), encoding: "UTF-8"),
             permitted_classes: [Date, Time],
             permitted_symbols: [],
-            aliases: true
+            aliases: true,
+          )
+        end
+
+        def content_from_anchor(document, anchor)
+          YAML.safe_load(
+            document.attributes["source_blocks"][anchor],
+            permitted_classes: [Date, Time],
+            permitted_symbols: [],
+            aliases: true,
           )
         end
       end

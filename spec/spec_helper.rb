@@ -31,33 +31,33 @@ RSpec.configure do |config|
 end
 
 BLANK_HDR = <<~"HDR".freeze
-  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}">
-  <bibdata type="standard">
-  <title language="en" format="text/plain">Document title</title>
-    <language>en</language>
-    <script>Latn</script>
-    <status><stage>published</stage></status>
-    <copyright>
-      <from>#{Time.new.year}</from>
-    </copyright>
-    <ext>
-    <doctype>standard</doctype>
-    </ext>
-  </bibdata>
+  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}" schema-version="v1.2.1">
+    <bibdata type="standard">
+      <title language="en" format="text/plain">Document title</title>
+      <language>en</language>
+      <script>Latn</script>
+      <status><stage>published</stage></status>
+      <copyright>
+        <from>#{Time.new.year}</from>
+      </copyright>
+      <ext>
+      <doctype>standard</doctype>
+      </ext>
+    </bibdata>
     <metanorma-extension>
-    <presentation-metadata>
-      <name>TOC Heading Levels</name>
-      <value>2</value>
-    </presentation-metadata>
-    <presentation-metadata>
-      <name>HTML TOC Heading Levels</name>
-      <value>2</value>
-    </presentation-metadata>
-    <presentation-metadata>
-      <name>DOC TOC Heading Levels</name>
-      <value>2</value>
-    </presentation-metadata>
-  </metanorma-extension>
+      <presentation-metadata>
+        <name>TOC Heading Levels</name>
+        <value>2</value>
+      </presentation-metadata>
+      <presentation-metadata>
+        <name>HTML TOC Heading Levels</name>
+        <value>2</value>
+      </presentation-metadata>
+      <presentation-metadata>
+        <name>DOC TOC Heading Levels</name>
+        <value>2</value>
+      </presentation-metadata>
+    </metanorma-extension>
 HDR
 
 def strip_guid(xml)
