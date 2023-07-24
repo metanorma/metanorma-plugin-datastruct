@@ -31,7 +31,7 @@ RSpec.configure do |config|
 end
 
 BLANK_HDR = <<~"HDR".freeze
-  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}" schema-version="v1.2.1">
+  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}">
     <bibdata type="standard">
       <title language="en" format="text/plain">Document title</title>
       <language>en</language>
@@ -85,6 +85,8 @@ def xmlpp(xml)
   XSL
   Nokogiri::XSLT(xsl).transform(Nokogiri::XML(xml, &:noblanks))
     .to_xml(indent: 2, encoding: "UTF-8")
+    .gsub(%r{<fetched>[^<]+</fetched>}, "<fetched/>")
+    .gsub(%r{ schema-version="[^"]+"}, "")
 end
 
 def xml_string_conent(xml)
