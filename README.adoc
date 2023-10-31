@@ -2,7 +2,8 @@
 
 == Functionality
 
-Metanorma plugin that allows you to access static data structures like JSON, YAML, XML from a Metanorma document
+Metanorma plugin that allows you to access static data structures like JSON, YAML,
+XML from a Metanorma document
 
 == Installation
 
@@ -13,11 +14,15 @@ $ gem install metanorma-plugin-datastruct
 
 == Usage
 
-In order to use the macros in Metanorma, add the gem gem 'metanorma-plugin-datastruct' in your Gemfile. Or have the gem installed, and Metanorma can use them automatically via the extension :plugin: datastruct.
+In order to use the macros in Metanorma, add the gem 'metanorma-plugin-datastruct'
+in your Gemfile. Or have the gem installed, and Metanorma can use them automatically
+via the extension :plugin: datastruct.
 
 === Expressions
 
-Currently, there are 2 plugins available: `yaml2text` and `json2text`. As states from the name, `yaml2text` allows to load yaml file and use it in expressions, `json2text` works with json files.
+Currently, there are 2 plugins available: `yaml2text` and `json2text`. As states
+from the name, `yaml2text` allows to load yaml file and use it in expressions,
+`json2text` works with json files.
 Macroses supports all https://shopify.github.io/liquid/basics/introduction/[Liquid syntax expressions], including:
 
 * variables, variable assignment
@@ -25,7 +30,8 @@ Macroses supports all https://shopify.github.io/liquid/basics/introduction/[Liqu
 * filters
 * loops
 
-See https://shopify.github.io/liquid/basics/introduction/[here] for the full description of Liquid tags and expressions.
+See https://shopify.github.io/liquid/basics/introduction/[here] for the full
+description of Liquid tags and expressions.
 
 
 [[defining_syntax]]
@@ -48,9 +54,14 @@ Where:
 
 * content within the block is called the "`template`";
 
-* `{YAML(JSON) file path}` is the location of the YAML(JSON) file that contains data to be loaded. Location of the file is computed relative to the source directory that `[yaml2text]`(`[json2text]`) is used (e.g., if `[yaml2text,data.yaml,data]` is invoked in an `.adoc` file located at `/foo/bar/doc.adoc`, the data file is expected to be found at `/foo/bar/data.yaml`);
+* `{YAML(JSON) file path}` is the location of the YAML(JSON) file that contains
+  data to be loaded. Location of the file is computed relative to the source
+  directory that `[yaml2text]`(`[json2text]`) is used (e.g., if
+  `[yaml2text,data.yaml,data]` is invoked in an `.adoc` file located at
+  `/foo/bar/doc.adoc`, the data file is expected to be found at `/foo/bar/data.yaml`);
 
-* `{self-defined context name}` is the name where the data read from the data file can be accessed with.
+* `{self-defined context name}` is the name where the data read from the data
+  file can be accessed with.
 
 === Interpolation
 
