@@ -76,4 +76,41 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
         .to(be_equivalent_to(xml_string_conent(output)))
     end
   end
+
+  context "with nested data types" do
+    it "handles those as expected" do
+      paths_in_yaml = assets_path("file_list.yaml")
+      puts paths_in_yaml
+
+      content = <<~TEXT
+        = Document title
+        Author
+        :docfile: test.adoc
+        :nodoc:
+        :novalid:
+        :no-isobib:
+        :imagesdir: spec/assets
+
+        [yaml2text,#{paths_in_yaml},paths]
+        ----
+        {% for path in paths %}
+
+        == {{path}}
+
+        [json2text,{{path}},events]
+        ---
+        == Name
+        {% for event in events %}
+        === {{event}}
+        {% endfor %}
+        ---
+
+        {% endfor %}
+        ----
+      TEXT
+
+      # metanorma_process(content)
+      puts xml_string_conent(metanorma_process(content))
+    end
+  end
 end
