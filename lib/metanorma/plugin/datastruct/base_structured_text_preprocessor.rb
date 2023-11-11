@@ -35,6 +35,8 @@ module Metanorma
             input_lines,
           )
 
+          # require 'pry'; binding.pry
+
           Asciidoctor::Reader.new(
             processed_lines(document, input_lines.to_enum),
           )
