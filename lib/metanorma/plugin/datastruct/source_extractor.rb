@@ -34,7 +34,7 @@ module Metanorma
             line = lines.next
 
             if /^embed::|^include::/.match?(line.strip)
-              file_lines = read(filename(@document, line))
+              file_lines = read(filename(@document, line)) or next
               SourceExtractor.extract(@document, file_lines)
             elsif m = match_anchor(line)
               @document.attributes["source_blocks"][m[:id]] = read_section lines
@@ -57,6 +57,7 @@ module Metanorma
         end
 
         def read(inc_path)
+          inc_path or return nil
           ::File.open inc_path, "r" do |fd|
             readlines_safe(fd).map(&:chomp)
           end

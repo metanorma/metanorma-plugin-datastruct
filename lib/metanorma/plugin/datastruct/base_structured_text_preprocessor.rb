@@ -19,6 +19,14 @@ Liquid::Template
                 Liquid::CustomBlocks::WithJsonNestedContext)
 Liquid::Template.register_filter(Liquid::CustomFilters)
 
+module Asciidoctor
+  class PreprocessorNoIfdefsReader < PreprocessorReader
+    def preprocess_conditional_directive(keyword, target, delimiter, text)
+      false # decline to resolve idefs
+    end
+  end
+end
+
 module Metanorma
   module Plugin
     module Datastruct
@@ -29,13 +37,15 @@ module Metanorma
         BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
 
         def process(document, reader)
-          input_lines = reader.readlines
+          #input_lines = reader.lines
+          r = ::Asciidoctor::PreprocessorNoIfdefsReader.new document, reader.lines
+          input_lines = r.readlines
           Metanorma::Plugin::Datastruct::SourceExtractor.extract(
             document,
             input_lines,
           )
 
-          Asciidoctor::Reader.new(
+          Asciidoctor::PreprocessorReader.new(document,
             processed_lines(document, input_lines.to_enum),
           )
         end
