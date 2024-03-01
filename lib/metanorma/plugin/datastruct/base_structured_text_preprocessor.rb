@@ -21,7 +21,7 @@ Liquid::Template.register_filter(Liquid::CustomFilters)
 
 module Asciidoctor
   class PreprocessorNoIfdefsReader < PreprocessorReader
-    def preprocess_conditional_directive(keyword, target, delimiter, text)
+    def preprocess_conditional_directive(_keyword, _target, _delimiter, _text)
       false # decline to resolve idefs
     end
   end
@@ -37,17 +37,15 @@ module Metanorma
         BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
 
         def process(document, reader)
-          #input_lines = reader.lines
-          r = ::Asciidoctor::PreprocessorNoIfdefsReader.new document, reader.lines
+          r = ::Asciidoctor::PreprocessorNoIfdefsReader
+            .new document, reader.lines
           input_lines = r.readlines
           Metanorma::Plugin::Datastruct::SourceExtractor.extract(
             document,
             input_lines,
           )
-
-          Asciidoctor::PreprocessorReader.new(document,
-            processed_lines(document, input_lines.to_enum),
-          )
+          Asciidoctor::PreprocessorNoIfdefsReader
+            .new(document, processed_lines(document, input_lines.to_enum))
         end
 
         protected
@@ -72,7 +70,7 @@ module Metanorma
 
         def relative_file_path(document, file_path)
           docfile_directory = File.dirname(
-            document.attributes["docfile"] || "."
+            document.attributes["docfile"] || ".",
           )
           document
             .path_resolver
@@ -161,7 +159,7 @@ module Metanorma
             .gsub(/(?<!{){(?!%)([^{}]+)(?<!%)}(?!})/, '{{\1}}')
             .gsub(/[a-z\.]+\#/, "index")
             .gsub(/{{(.+)\s+\+\s+(\d+)\s*?}}/, '{{ \1 | plus: \2 }}')
-            .gsub(/{{(.+)\s+\-\s+(\d+)\s*?}}/, '{{ \1 | minus: \2 }}')
+            .gsub(/{{(.+)\s+-\s+(\d+)\s*?}}/, '{{ \1 | minus: \2 }}')
             .gsub(/{{(.+)\.values(.*?)}}/,
                   '{% assign custom_value = \1 | values %}{{custom_value\2}}')
         end
@@ -174,7 +172,7 @@ module Metanorma
             template_string: context_lines.join("\n"),
             context_items: context_items,
             context_name: context_name,
-            document: document
+            document: document,
           )
           notify_render_errors(document, errors)
           render_result.split("\n")
@@ -184,7 +182,8 @@ module Metanorma
                                  context_name:, document:)
           liquid_template = Liquid::Template.parse(template_string)
           # Allow includes for the template
-          liquid_template.registers[:file_system] = ::Liquid::LocalFileSystem.new(relative_file_path(document, ""))
+          liquid_template.registers[:file_system] =
+            ::Liquid::LocalFileSystem.new(relative_file_path(document, ""))
           rendered_string = liquid_template
             .render(context_name => context_items,
                     strict_variables: true,
