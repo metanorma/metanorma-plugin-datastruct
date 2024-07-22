@@ -15,6 +15,7 @@ require "equivalent-xml"
 require "metanorma"
 require "metanorma/standoc"
 require "byebug"
+require "xml-c14n"
 
 Dir[File.expand_path("./support/**/**/*.rb", __dir__)].each { |f| require f }
 
@@ -68,33 +69,12 @@ def strip_guid(xml)
   xml
     .gsub(%r{ id="_[^"]+"}, ' id="_"')
     .gsub(%r{ target="_[^"]+"}, ' target="_"')
-end
-
-def xmlpp(xml)
-  c = HTMLEntities.new
-  xml &&= xml.split(/(&\S+?;)/).map do |n|
-    if /^&\S+?;$/.match?(n)
-      c.encode(c.decode(n), :hexadecimal)
-    else n
-    end
-  end.join
-  xsl = <<~XSL
-    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-      <!--<xsl:strip-space elements="*"/>-->
-      <xsl:template match="/">
-        <xsl:copy-of select="."/>
-      </xsl:template>
-    </xsl:stylesheet>
-  XSL
-  Nokogiri::XSLT(xsl).transform(Nokogiri::XML(xml, &:noblanks))
-    .to_xml(indent: 2, encoding: "UTF-8")
     .gsub(%r{<fetched>[^<]+</fetched>}, "<fetched/>")
     .gsub(%r{ schema-version="[^"]+"}, "")
 end
 
 def xml_string_conent(xml)
-  strip_guid(xmlpp(xml))
+  strip_guid(Xml::C14n.format(xml))
 end
 
 def metanorma_process(input)
