@@ -39,8 +39,15 @@ module Metanorma
 
         # https://ruby-doc.org/stdlib-2.5.1/libdoc/psych/rdoc/Psych.html#method-c-safe_load
         def content_from_file(document, file_path)
+          resolved_file_path = relative_file_path(document, file_path)
+
+          unless File.exist?(resolved_file_path)
+            document.logger.warn("YAML file not found: #{resolved_file_path}")
+            return
+          end
+
           YAML.safe_load(
-            File.read(relative_file_path(document, file_path), encoding: "UTF-8"),
+            File.read(resolved_file_path, encoding: "UTF-8"),
             permitted_classes: [Date, Time],
             permitted_symbols: [],
             aliases: true,
