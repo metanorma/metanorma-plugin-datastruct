@@ -136,6 +136,8 @@ module Metanorma
                             content_from_file(document, block_match[1])
                           end
 
+          return if context_items.nil?
+
           parse_context_block(document: document,
                               context_lines: transformed_liquid_lines,
                               context_items: context_items,
