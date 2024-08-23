@@ -143,9 +143,8 @@ module Metanorma
                               context_items: context_items,
                               context_name: block_match[2].strip)
         rescue StandardError => e
-          document.logger
-            .warn("Failed to parse #{config[:block_name]} \
-              block: #{e.message}")
+          ::Metanorma::Util.log("Failed to parse #{config[:block_name]} \
+              block: #{e.message}", :error)
           []
         end
 
