@@ -42,7 +42,7 @@ module Metanorma
           resolved_file_path = relative_file_path(document, file_path)
 
           unless File.exist?(resolved_file_path)
-            document.logger.warn("YAML file not found: #{resolved_file_path}")
+            ::Metanorma::Util.log("YAML file referenced in [yaml2text] block not found: #{resolved_file_path}", :error)
             return
           end
 
