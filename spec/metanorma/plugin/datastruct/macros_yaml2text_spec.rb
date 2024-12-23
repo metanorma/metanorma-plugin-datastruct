@@ -43,31 +43,31 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
     let(:output) do
       <<~TEXT
         #{BLANK_HDR}
-        <sections>
-        <clause id="_" inline-header="false" obligation="normative">
-        <title>Nicaragua</title>
-        <dl id="_">
-        <dt>Amateur stations</dt>
-        <dd>
-        <p id="_">O[F-J][:digit:][0-9A-Z]{3}[:upper:]{1}</p>
-        </dd>
-        </dl>
-        </clause>
-        <clause id="_" inline-header="false" obligation="normative">
-        <title>Niger</title>
-        <dl id="_">
-        <dt>Amateur stations</dt>
-        <dd>
-        <p id="_">O[F-J][:upper:]{5,10}</p>
-        </dd>
-        <dt>Experimental</dt>
-        <dd>
-        <p id="_">{&#8221;regex&#8221;&#8658;&#8221;O[F-J][:upper:]{5,10}&#8221;}</p>
-        </dd>
-        </dl>
-        </clause>
-        </sections>
-        </standard-document>
+                  <sections>
+             <clause id="_" inline-header="false" obligation="normative">
+                <title>Nicaragua</title>
+                <dl id="_">
+                   <dt>Amateur stations</dt>
+                   <dd>
+                      <p id="_">O[F-J][:digit:][0-9A-Z]{3}[:upper:]{1}</p>
+                   </dd>
+                </dl>
+             </clause>
+             <clause id="_" inline-header="false" obligation="normative">
+                <title>Niger</title>
+                <dl id="_">
+                   <dt>Amateur stations</dt>
+                   <dd>
+                      <p id="_">O[F-J][:upper:]{5,10}</p>
+                   </dd>
+                   <dt>Experimental</dt>
+                   <dd>
+                      <p id="_">{”regex” ⇒ “O[F-J][:upper:]{5,10}”}</p>
+                   </dd>
+                </dl>
+             </clause>
+          </sections>
+       </standard-document>
       TEXT
     end
 

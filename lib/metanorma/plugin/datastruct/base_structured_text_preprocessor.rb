@@ -10,14 +10,15 @@ require "liquid/custom_filters/values"
 require "liquid/custom_filters/replace_regex"
 require "metanorma/plugin/datastruct/source_extractor"
 
-Liquid::Template.register_tag("keyiterator", Liquid::CustomBlocks::KeyIterator)
-Liquid::Template
+Liquid::Environment.default
+  .register_tag("keyiterator", Liquid::CustomBlocks::KeyIterator)
+Liquid::Environment.default
   .register_tag("with_yaml_nested_context",
                 Liquid::CustomBlocks::WithYamlNestedContext)
-Liquid::Template
+Liquid::Environment.default
   .register_tag("with_json_nested_context",
                 Liquid::CustomBlocks::WithJsonNestedContext)
-Liquid::Template.register_filter(Liquid::CustomFilters)
+Liquid::Environment.default.register_filter(Liquid::CustomFilters)
 
 module Asciidoctor
   class PreprocessorNoIfdefsReader < PreprocessorReader
