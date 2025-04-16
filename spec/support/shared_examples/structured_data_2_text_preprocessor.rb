@@ -50,7 +50,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               </dd>
             </dl>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -102,7 +102,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
                <p id='_'>This section is about dolor.</p>
               </clause>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -143,7 +143,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               <p id='_'>dolor sit amet</p>
             </clause>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -191,7 +191,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
                 <p id='_'>dolor sit amet</p>
             </clause>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -266,7 +266,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               </dd>
             </dl>
               </sections>
-              </standard-document>
+              </metanorma>
           TEXT
         end
 
@@ -311,27 +311,34 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
         let(:output) do
           <<~TEXT
             #{BLANK_HDR}
+
               <preface>
-                <foreword id='_' obligation='informative'>
+                <foreword id="_" obligation="informative">
                   <title>Foreword</title>
-                  <p id='_'>First item is lorem. Last item is dolor.</p>
+                  <p id="_">First item is lorem. Last item is dolor.</p>
                 </foreword>
               </preface>
               <sections>
-                <clause id='_' inline-header='false' obligation='normative'>
+                <clause id="_" inline-header="false" obligation="normative">
                   <title>0 → 1 lorem == lorem</title>
-                  <sourcecode lang='ruby' id='_'>doc-0.rb[]</sourcecode>
+                  <sourcecode lang="ruby" id="_">
+                    <body>doc-0.rb[]</body>
+                  </sourcecode>
                 </clause>
-                <clause id='_' inline-header='false' obligation='normative'>
+                <clause id="_" inline-header="false" obligation="normative">
                   <title>1 → 2 ipsum == ipsum</title>
-                  <sourcecode lang='ruby' id='_'>doc-1.rb[]</sourcecode>
+                  <sourcecode lang="ruby" id="_">
+                    <body>doc-1.rb[]</body>
+                  </sourcecode>
                 </clause>
-                <clause id='_' inline-header='false' obligation='normative'>
+                <clause id="_" inline-header="false" obligation="normative">
                   <title>2 → 3 dolor == dolor</title>
-                  <sourcecode lang='ruby' id='_'>doc-2.rb[]</sourcecode>
+                  <sourcecode lang="ruby" id="_">
+                    <body>doc-2.rb[]</body>
+                  </sourcecode>
                 </clause>
               </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -378,7 +385,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               <sections>
                 #{File.read(File.expand_path('../../assets/codes_table.html', __dir__))}
               </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -467,7 +474,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
                   </tbody>
                 </table>
               </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -511,7 +518,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               <p id='_'>ONE 3</p>
               <p id='_'>TWO 3</p>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -553,7 +560,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
               <p id='_'>1889-09-28</p>
               <p id='_'>2020-10-15 05:34:00 UTC</p>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
 
@@ -669,7 +676,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
                 <title>nested2 two-main</title>
               </clause>
             </sections>
-            </standard-document>
+            </metanorma>
           TEXT
         end
         let(:file_list) do
@@ -775,12 +782,12 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           <<~XML
             #{BLANK_HDR}
               <sections>
-                <sourcecode id="abc">#{abc_content}</sourcecode>
-                <sourcecode id="def" lang="json">#{def_content}</sourcecode>
+                <sourcecode id="abc"><body>#{abc_content}</body></sourcecode>
+                <sourcecode id="def" lang="json"><body>#{def_content}</body></sourcecode>
                 <p id="_">The length of the array is 3.</p>
                 <p id="_">a: b</p>
               </sections>
-            </standard-document>
+            </metanorma>
           XML
         end
 

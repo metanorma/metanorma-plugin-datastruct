@@ -62,12 +62,12 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
                    </dd>
                    <dt>Experimental</dt>
                    <dd>
-                      <p id="_">{”regex” ⇒ “O[F-J][:upper:]{5,10}”}</p>
+                      <p id="_">{”regex”⇒”O[F-J][:upper:]{5,10}”}</p>
                    </dd>
                 </dl>
              </clause>
           </sections>
-       </standard-document>
+       </metanorma>
       TEXT
     end
 
