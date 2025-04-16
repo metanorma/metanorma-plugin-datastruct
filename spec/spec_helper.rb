@@ -32,18 +32,23 @@ RSpec.configure do |config|
 end
 
 BLANK_HDR = <<~"HDR".freeze
-  <standard-document xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}">
+  <?xml version="1.0" encoding="UTF-8"?>
+
+
+  <metanorma xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}" flavor="standoc">
     <bibdata type="standard">
       <title language="en" format="text/plain">Document title</title>
       <language>en</language>
       <script>Latn</script>
-      <status><stage>published</stage></status>
+      <status>
+        <stage>published</stage>
+      </status>
       <copyright>
         <from>#{Time.new.year}</from>
       </copyright>
       <ext>
-      <doctype>standard</doctype>
-      <flavor>standoc</flavor>
+        <doctype>standard</doctype>
+        <flavor>standoc</flavor>
       </ext>
     </bibdata>
     <metanorma-extension>
@@ -60,9 +65,9 @@ BLANK_HDR = <<~"HDR".freeze
         <value>2</value>
       </presentation-metadata>
       <presentation-metadata>
-      <name>PDF TOC Heading Levels</name>
-      <value>2</value>
-    </presentation-metadata>
+         <name>PDF TOC Heading Levels</name>
+        <value>2</value>
+      </presentation-metadata>
     </metanorma-extension>
 HDR
 
