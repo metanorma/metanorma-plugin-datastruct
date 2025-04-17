@@ -7,6 +7,7 @@ require "metanorma-plugin-datastruct"
 Asciidoctor::Extensions.register do
   preprocessor Metanorma::Plugin::Datastruct::Json2TextPreprocessor
   preprocessor Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor
+  preprocessor Metanorma::Plugin::Datastruct::Data2TextPreprocessor
 end
 
 require "metanorma-standoc"
