@@ -708,6 +708,70 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             .to(be_equivalent_to(output))
         end
       end
+
+      context "Multiple contexts" do
+        let(:example_file2) { "example2.#{extention}" }
+
+        before do
+          File.open(example_file2, "w") do |n|
+            n.puts(transform_to_type(example_content2))
+          end
+        end
+
+        after do
+          FileUtils.rm_rf(example_file2)
+        end
+
+        let(:example_content) do
+          { "name" => "Lorem ipsum", "desc" => "dolor sit amet" }
+        end
+        let(:example_content2) do
+          { "name" => "spaghetti", "desc" => "wheat noodles of 9mm diameter" }
+        end
+        let(:input) do
+          <<~TEXT
+            = Document title
+            Author
+            :docfile: test.adoc
+            :nodoc:
+            :novalid:
+            :no-isobib:
+            :imagesdir: spec/assets
+
+            [#{extention}2text,item1=#{example_file},item2=#{example_file2}]
+            ----
+            === {item1.name}
+
+            {item1.desc}
+
+            === {item2.name}
+
+            {item2.desc}
+            ----
+          TEXT
+        end
+        let(:output) do
+          <<~TEXT
+            #{BLANK_HDR}
+            <sections>
+              <clause id="_" inline-header="false" obligation="normative">
+                <title>Lorem ipsum</title>
+                <p id="_">dolor sit amet</p>
+              </clause>
+              <clause id="_" inline-header="false" obligation="normative">
+                <title>spaghetti</title>
+                <p id="_">wheat noodles of 9mm diameter</p>
+              </clause>
+            </sections>
+            </metanorma>
+          TEXT
+        end
+
+        it "correctly renders input" do
+          expect(xml_string_conent(metanorma_process(input)))
+            .to(be_equivalent_to(output))
+        end
+      end
     end
 
     context "when sources are in the document" do

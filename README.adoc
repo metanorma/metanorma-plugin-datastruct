@@ -427,7 +427,7 @@ And the block:
 Where:
 
 * file path is `strings.yaml`
-* `limit` - how many items we shoudl take from the array
+* `limit` - how many items we should take from the array
 * `offset` - zero-based offset of item from which start the loop
 * `{{item}}` gives the value of item in the array
 
@@ -576,5 +576,61 @@ Last item is dolor.
 ----
 
 ------
+
+--
+
+
+=== Multiple contexts
+
+Multiple contexts can be defined in a single block.
+
+EXAMPLE:
+--
+Given:
+
+strings1.yaml
+[source,yaml]
+----
+---
+foo: bar
+dead: beef
+----
+
+strings2.yaml
+[source,yaml]
+----
+---
+hello: world
+color: red
+shape: square
+----
+
+And the block:
+[source,asciidoc]
+------
+[yaml2text,data1=strings1.yaml,data2=strings1.yaml]
+----
+I'm heading to the {{data.foo}} for {{data.dead}}.
+
+This is hello {{data2.hello}}.
+The color is {{data2.color}} and the shape is {{data2.shape}}.
+
+----
+------
+
+The file path is `strings1.yaml`, and context name is `data`.
+`{{data.foo}}` evaluates to the value of the key `foo` in `data`.
+
+The file path is `strings2.yaml`, and context name is `data2`.
+`{{data2.hello}}` evaluates to the value of the key `hello` in `data2`.
+
+Will render as:
+[source,asciidoc]
+----
+I'm heading to the bar for beef.
+
+This is hello world.
+The color is red and the shape is square.
+----
 
 --
