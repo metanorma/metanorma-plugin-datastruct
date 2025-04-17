@@ -3,7 +3,7 @@ require "metanorma/plugin/datastruct/yaml2_text_preprocessor"
 
 RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
   it_behaves_like "structured data 2 text preprocessor" do
-    let(:extention) { "yaml" }
+    let(:extension) { "yaml" }
     def transform_to_type(data)
       data.to_yaml
     end
@@ -72,8 +72,8 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
     end
 
     it "correctly renders input" do
-      expect(xml_string_conent(metanorma_process(input)))
-        .to(be_equivalent_to(xml_string_conent(output)))
+      expect(xml_string_content(metanorma_process(input)))
+        .to(be_equivalent_to(xml_string_content(output)))
     end
   end
 
@@ -136,8 +136,8 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
     end
 
     it "correctly renders input" do
-      expect(xml_string_conent(metanorma_process(input)))
-        .to(be_equivalent_to(xml_string_conent(output)))
+      expect(xml_string_content(metanorma_process(input)))
+        .to(be_equivalent_to(xml_string_content(output)))
     end
   end
 end
