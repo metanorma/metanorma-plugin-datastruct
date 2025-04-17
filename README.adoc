@@ -634,3 +634,61 @@ The color is red and the shape is square.
 ----
 
 --
+
+
+=== Multiple contexts with mixed json files and yaml files (data2text)
+
+Multiple contexts can be mixed with json files and yaml files by using
+`data2text`.
+
+EXAMPLE:
+--
+Given:
+
+strings1.json
+[source,json]
+----
+{
+  "foo": "bar",
+  "dead": "beef"
+}
+----
+
+strings2.yaml
+[source,yaml]
+----
+---
+hello: world
+color: red
+shape: square
+----
+
+And the block:
+[source,asciidoc]
+------
+[data2text,my_json=strings1.json,my_yaml=strings2.yaml]
+----
+I'm heading to the {{my_json.foo}} for {{my_json.dead}}.
+
+This is hello {{my_yaml.hello}}.
+The color is {{my_yaml.color}} and the shape is {{my_yaml.shape}}.
+
+----
+------
+
+The file path is `strings1.json`, and context name is `my_json`.
+`{{my_json.foo}}` evaluates to the value of the key `foo` in `my_json`.
+
+The file path is `strings2.yaml`, and context name is `my_yaml`.
+`{{my_yaml.hello}}` evaluates to the value of the key `hello` in `my_yaml`.
+
+Will render as:
+[source,asciidoc]
+----
+I'm heading to the bar for beef.
+
+This is hello world.
+The color is red and the shape is square.
+----
+
+--

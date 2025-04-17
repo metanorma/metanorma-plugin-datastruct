@@ -37,7 +37,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::SourceExtractor do
           }
         end
 
-        it "should extract all the anchors and their coresponding data" do
+        it "should extract all the anchors and their corresponding data" do
           subject.extract
 
           expect(document.attributes["source_blocks"]).to eq(expected_output)
@@ -74,7 +74,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::SourceExtractor do
           end
         end
 
-        it "should extract all the anchors and their coresponding data" do
+        it "should extract all the anchors and their corresponding data" do
           subject.extract
 
           expect(document.attributes["source_blocks"]).to eq(expected_output)
