@@ -82,7 +82,7 @@ def strip_guid(xml)
     .gsub(%r{ schema-version="[^"]+"}, "")
 end
 
-def xml_string_conent(xml)
+def xml_string_content(xml)
   strip_guid(Xml::C14n.format(xml))
 end
 
