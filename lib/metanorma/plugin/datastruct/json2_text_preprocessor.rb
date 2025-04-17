@@ -7,10 +7,10 @@ module Metanorma
   module Plugin
     module Datastruct
       class Json2TextPreprocessor < BaseStructuredTextPreprocessor
-        # search document for block `yaml2text`
+        # search document for block `json2text`
         #   after that take template from block and read file into this template
         #   example:
-        #     [yaml2text,foobar.yaml]
+        #     [json2text,foobar.json]
         #     ----
         #     === {item.name}
         #     {item.desc}
@@ -18,17 +18,19 @@ module Metanorma
         #     {item.symbol}:: {item.symbol_def}
         #     ----
         #
-        #   with content of `foobar.yaml` file equal to:
-        #     - name: spaghetti
-        #       desc: wheat noodles of 9mm diameter
-        #       symbol: SPAG
-        #       symbol_def: the situation is message like spaghetti at a kid's
+        #   with content of `foobar.json` file equal to:
+        #     {
+        #       "name": "spaghetti",
+        #       "desc": "wheat noodles of 9mm diameter".
+        #       "symbol": "SPAG",
+        #       "symbol_def": "the situation is message like spaghetti",
+        #     }
         #
         #   will produce:
         #     === spaghetti
         #     wheat noodles of 9mm diameter
         #
-        #     SPAG:: the situation is message like spaghetti at a kid's meal
+        #     SPAG:: the situation is message like spaghetti
 
         def initialize(config = {})
           super
