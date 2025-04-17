@@ -6,23 +6,25 @@ require "metanorma/plugin/datastruct/base_structured_text_preprocessor"
 module Metanorma
   module Plugin
     module Datastruct
-      class Json2TextPreprocessor < BaseStructuredTextPreprocessor
+      class Data2TextPreprocessor < BaseStructuredTextPreprocessor
         include Content
-        # search document for block `json2text`
+        # search document for block `data2text`
         #   after that take template from block and read file into this template
         #   example:
-        #     [json2text,foobar.json]
+        #     [data2text,my_yaml=foobar.yaml,my_json=foobar.json]
         #     ----
-        #     === {item.name}
-        #     {item.desc}
+        #     === {foobar.name}
+        #     {foobar.desc}
         #
-        #     {item.symbol}:: {item.symbol_def}
+        #     {my_json.symbol}:: {my_json.symbol_def}
         #     ----
         #
-        #   with content of `foobar.json` file equal to:
+        #   with content of `foobar.yaml` file equal to:
+        #     - name: spaghetti
+        #       desc: wheat noodles of 9mm diameter
+        #
+        #   and content of `foobar.json` file equal to:
         #     {
-        #       "name": "spaghetti",
-        #       "desc": "wheat noodles of 9mm diameter".
         #       "symbol": "SPAG",
         #       "symbol_def": "the situation is message like spaghetti",
         #     }
@@ -35,7 +37,7 @@ module Metanorma
 
         def initialize(config = {})
           super
-          @config[:block_name] = "json2text"
+          @config[:block_name] = "data2text"
         end
       end
     end
