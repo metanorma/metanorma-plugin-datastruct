@@ -9,7 +9,7 @@ module Liquid
       def render(context)
         context_file = context[@context_file_variable].to_s.strip
         context[@context_name] = JSON.parse(
-          File.read(context_file, encoding: "utf-8")
+          File.read(context_file, encoding: "utf-8"),
         )
         super
       end

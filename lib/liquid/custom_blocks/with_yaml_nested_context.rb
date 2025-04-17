@@ -12,7 +12,7 @@ module Liquid
           File.read(context_file, encoding: "utf-8"),
           permitted_classes: [Date, Time],
           permitted_symbols: [],
-          aliases: true
+          aliases: true,
         )
         super
       end

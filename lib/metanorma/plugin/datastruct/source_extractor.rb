@@ -27,7 +27,7 @@ module Metanorma
           new(document, input_lines).extract
         end
 
-        def extract
+        def extract # rubocop:disable Metrics/AbcSize
           lines = @input_lines.to_enum
 
           loop do

@@ -38,11 +38,14 @@ module Metanorma
         protected
 
         # https://ruby-doc.org/stdlib-2.5.1/libdoc/psych/rdoc/Psych.html#method-c-safe_load
-        def content_from_file(document, file_path)
+        def content_from_file(document, file_path) # rubocop:disable Metrics/MethodLength
           resolved_file_path = relative_file_path(document, file_path)
 
           unless File.exist?(resolved_file_path)
-            ::Metanorma::Util.log("YAML file referenced in [yaml2text] block not found: #{resolved_file_path}", :error)
+            ::Metanorma::Util.log(
+              "YAML file referenced in [yaml2text] block not found: " \
+              "#{resolved_file_path}", :error
+            )
             return
           end
 
