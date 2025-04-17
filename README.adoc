@@ -608,9 +608,9 @@ shape: square
 And the block:
 [source,asciidoc]
 ------
-[yaml2text,data1=strings1.yaml,data2=strings1.yaml]
+[yaml2text,data1=strings1.yaml,data2=strings2.yaml]
 ----
-I'm heading to the {{data.foo}} for {{data.dead}}.
+I'm heading to the {{data1.foo}} for {{data1.dead}}.
 
 This is hello {{data2.hello}}.
 The color is {{data2.color}} and the shape is {{data2.shape}}.
@@ -618,8 +618,8 @@ The color is {{data2.color}} and the shape is {{data2.shape}}.
 ----
 ------
 
-The file path is `strings1.yaml`, and context name is `data`.
-`{{data.foo}}` evaluates to the value of the key `foo` in `data`.
+The file path is `strings1.yaml`, and context name is `data1`.
+`{{data1.foo}}` evaluates to the value of the key `foo` in `data1`.
 
 The file path is `strings2.yaml`, and context name is `data2`.
 `{{data2.hello}}` evaluates to the value of the key `hello` in `data2`.
