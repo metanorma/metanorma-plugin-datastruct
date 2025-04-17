@@ -17,7 +17,9 @@ require "metanorma/standoc"
 require "byebug"
 require "xml-c14n"
 
-Dir[File.expand_path("./support/**/**/*.rb", __dir__)].each { |f| require f }
+Dir[File.expand_path("./support/**/**/*.rb", __dir__)].sort.each do |f|
+  require f
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -6,9 +6,13 @@ module Liquid
         @context_name, @var_name = markup.split(",").map(&:strip)
       end
 
-      def render(context)
+      def render(context) # rubocop:disable Metrics/MethodLength
         res = ""
-        iterator = context[@context_name].is_a?(Hash) ? context[@context_name].keys : context[@context_name]
+        iterator = if context[@context_name].is_a?(Hash)
+                     context[@context_name].keys
+                   else
+                     context[@context_name]
+                   end
         iterator.each.with_index do |key, index|
           context["index"] = index
           context[@var_name] = key
