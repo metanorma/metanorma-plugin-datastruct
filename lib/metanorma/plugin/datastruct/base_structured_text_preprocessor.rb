@@ -212,7 +212,7 @@ module Metanorma
             ::Liquid::LocalFileSystem.new(relative_file_path(document, ""))
           rendered_string = liquid_template
             .render(contexts,
-                    strict_variables: true,
+                    strict_variables: false,
                     error_mode: :warn)
           [rendered_string, liquid_template.errors]
         end
