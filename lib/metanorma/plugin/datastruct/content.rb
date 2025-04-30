@@ -23,7 +23,7 @@ module Metanorma
 
           YAML.safe_load(
             File.read(resolved_file_path, encoding: "UTF-8"),
-            permitted_classes: [Date, Time],
+            permitted_classes: [Date, Time, Symbol],
             permitted_symbols: [],
             aliases: true,
           )
@@ -32,7 +32,7 @@ module Metanorma
         def yaml_content_from_anchor(document, anchor)
           YAML.safe_load(
             document.attributes["source_blocks"][anchor],
-            permitted_classes: [Date, Time],
+            permitted_classes: [Date, Time, Symbol],
             permitted_symbols: [],
             aliases: true,
           )
@@ -48,19 +48,46 @@ module Metanorma
         end
 
         def content_from_file(document, file_path)
-          if json_file?(file_path)
-            json_content_from_file(document, file_path)
-          else
-            yaml_content_from_file(document, file_path)
-          end
+          content = if json_file?(file_path)
+                      json_content_from_file(document, file_path)
+                    else
+                      yaml_content_from_file(document, file_path)
+                    end
+
+          load_content_data(content, document, file_path)
         end
 
         def content_from_anchor(document, anchor)
-          if json_content?(document.attributes["source_blocks"][anchor])
+          source_block = document.attributes["source_blocks"][anchor]
+          if json_content?(source_block)
             json_content_from_anchor(document, anchor)
           else
             yaml_content_from_anchor(document, anchor)
           end
+        end
+
+        def load_content_data(content, document, file_path) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+          if content.is_a?(Hash)
+            content.each do |key, value|
+              content[key] = load_content_data(value, document, file_path)
+            end
+          elsif content.is_a?(Array)
+            content.map { |item| load_content_data(item, document, file_path) }
+          elsif json_or_yaml_filepath?(content.to_s)
+            {
+              "file" => content.to_s,
+              "data" => content_from_file(
+                document,
+                File.expand_path(content.to_s, File.dirname(file_path)),
+              ),
+            }
+          else
+            content
+          end
+        end
+
+        def json_or_yaml_filepath?(file_path)
+          file_path.end_with?(".json", ".yaml", ".yml")
         end
 
         def json_file?(file_path)
