@@ -95,3 +95,7 @@ end
 def assets_path(path)
   File.join(File.expand_path("./assets", __dir__), path)
 end
+
+def fixtures_path(path)
+  File.join(File.expand_path("./fixtures", __dir__), path)
+end

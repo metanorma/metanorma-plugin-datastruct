@@ -4,20 +4,12 @@ require "liquid"
 require "asciidoctor"
 require "asciidoctor/reader"
 require "liquid/custom_blocks/key_iterator"
-require "liquid/custom_blocks/with_yaml_nested_context"
-require "liquid/custom_blocks/with_json_nested_context"
 require "liquid/custom_filters/values"
 require "liquid/custom_filters/replace_regex"
 require "metanorma/plugin/datastruct/source_extractor"
 
 Liquid::Environment.default
   .register_tag("keyiterator", Liquid::CustomBlocks::KeyIterator)
-Liquid::Environment.default
-  .register_tag("with_yaml_nested_context",
-                Liquid::CustomBlocks::WithYamlNestedContext)
-Liquid::Environment.default
-  .register_tag("with_json_nested_context",
-                Liquid::CustomBlocks::WithJsonNestedContext)
 Liquid::Environment.default.register_filter(Liquid::CustomFilters)
 
 module Asciidoctor
@@ -91,25 +83,9 @@ module Metanorma
                          block_match)
         end
 
-        def collect_internal_block_lines(document, input_lines, end_mark) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def collect_internal_block_lines(_document, input_lines, end_mark) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           current_block = []
-          nested_marks = []
           while (block_line = input_lines.next) != end_mark
-            if nested_match = block_line
-                .match(/^\[#{config[:block_name]},(.+?),(.+?)\]/)
-              current_block
-                .push(*nested_context_tag(document,
-                                          nested_match[1],
-                                          nested_match[2]).split("\n"))
-              next nested_marks.push(input_lines.next)
-            end
-
-            if nested_marks.include?(block_line)
-              current_block.push(
-                "{% endwith_#{data_file_type}_nested_context %}",
-              )
-              next nested_marks.delete(block_line)
-            end
             current_block.push(block_line)
           end
           current_block

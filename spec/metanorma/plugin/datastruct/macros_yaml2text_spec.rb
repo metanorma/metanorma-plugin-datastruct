@@ -22,21 +22,17 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
         :no-isobib:
         :imagesdir: spec/assets
 
-        [yaml2text,#{example_file},data]
+        [yaml2text,data=#{example_file},data_two=#{example_file2}]
         ----
         === Nicaragua
 
         Amateur stations:: {{ data.groups.amateur.regex }}
 
-
-        [yaml2text,#{example_file2},data_two]
-        ---
         === Niger
 
         Amateur stations:: {{ data_two.groups.amateur.regex }}
 
         Experimental:: {{ data_two.groups.experimental }}
-        ---
         ----
       TEXT
     end

@@ -577,30 +577,9 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             "time" => Time.gm(2020, 10, 15, 5, 34),
           }
         end
-        let(:parent_file) { "parent_file.#{extension}" }
-        let(:parent_file_content) { [nested_file, nested_file2] }
-        let(:parent_file2) { "parent_file2.#{extension}" }
-        let(:parent_file2_content) { ["name", "description"] }
-        let(:parent_file3) { "parent_file_3.#{extension}" }
-        let(:parent_file3_content) { ["one", "two"] }
-        let(:nested_file) { "nested_file.#{extension}" }
-        let(:nested_file_content) do
-          {
-            "name" => "nested file-main",
-            "description" => "nested description-main",
-            "one" => "nested one-main",
-            "two" => "nested two-main",
-          }
-        end
-        let(:nested_file2) { "nested_file_2.#{extension}" }
-        let(:nested_file2_content) do
-          {
-            "name" => "nested2 name-main",
-            "description" => "nested2 description-main",
-            "one" => "nested2 one-main",
-            "two" => "nested2 two-main",
-          }
-        end
+        let(:parent_file_1) { fixtures_path("parent_file_1.#{extension}") }
+        let(:parent_file_2) { fixtures_path("parent_file_2.#{extension}") }
+        let(:parent_file_3) { fixtures_path("parent_file_3.#{extension}") }
         let(:input) do
           <<~TEXT
             = Document title
@@ -611,37 +590,20 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             :no-isobib:
             :imagesdir: spec/assets
 
-            [#{extension}2text,#{parent_file},paths]
+            [#{extension}2text,paths=#{parent_file_1},attribute_names=#{parent_file_2},another_attribute_names=#{parent_file_3}]
             ----
             {% for path in paths %}
-
-            [#{extension}2text,#{parent_file2},attribute_names]
-            ---
             {% for name in attribute_names %}
 
-            [#{extension}2text,{{ path }},data]
-            --
-
-            == {{ data[name] | split: "-" | last }}: {{ data[name] }}
-
-            --
+            == {{ path['data'][name] | split: "-" | last }}: {{ path['data'][name] }}
 
             {% endfor %}
-            ---
 
-            [#{extension}2text,#{parent_file3},attribute_names]
-            ---
-            {% for name in attribute_names %}
+            {% for another_name in another_attribute_names %}
 
-            [#{extension}2text,{{ path }},data]
-            --
-
-            == {{ data[name] }}
-
-            --
+            == {{ path['data'][another_name] }}
 
             {% endfor %}
-            ---
 
             {% endfor %}
             ----
@@ -678,29 +640,6 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             </sections>
             </metanorma>
           TEXT
-        end
-        let(:file_list) do
-          {
-            parent_file => parent_file_content,
-            parent_file2 => parent_file2_content,
-            parent_file3 => parent_file3_content,
-            nested_file => nested_file_content,
-            nested_file2 => nested_file2_content,
-          }
-        end
-
-        before do
-          file_list.each_pair do |file, content|
-            File.open(file, "w") do |n|
-              n.puts(transform_to_type(content))
-            end
-          end
-        end
-
-        after do
-          file_list.each_key do |file|
-            FileUtils.rm_rf(file)
-          end
         end
 
         it "renders liquid markup" do
