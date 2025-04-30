@@ -163,10 +163,13 @@ module Metanorma
           transformed_liquid_lines)
           contexts = {}
           (1..block_match.size - 1).each do |i|
-            context_and_path = block_match[i].strip
-            context_name, path = context_and_path.split("=")
-            context_items = content_from_file(document, path)
-            contexts[context_name] = context_items
+            context_and_paths = block_match[i].strip
+            context_and_paths.split(",").each do |context_and_path|
+              context_and_path.strip!
+              context_name, path = context_and_path.split("=")
+              context_items = content_from_file(document, path)
+              contexts[context_name] = context_items
+            end
           end
 
           parse_context_block(document: document,
