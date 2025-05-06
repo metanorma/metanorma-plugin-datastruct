@@ -594,14 +594,15 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             ----
             {% for path in paths %}
             {% for name in attribute_names %}
+            {% assign data = load_file: path %}
 
-            == {{ path['data'][name] | split: "-" | last }}: {{ path['data'][name] }}
+            == {{ data[name] | split: "-" | last }}: {{ data[name] }}
 
             {% endfor %}
 
             {% for another_name in another_attribute_names %}
 
-            == {{ path['data'][another_name] }}
+            == {{ data[another_name] }}
 
             {% endfor %}
 

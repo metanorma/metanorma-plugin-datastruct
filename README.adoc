@@ -692,3 +692,70 @@ The color is red and the shape is square.
 ----
 
 --
+
+
+=== Content contains json or yaml filepaths
+
+When the content of the loaded files contains filepaths of json files or
+yaml files, it will load extra data by these filepaths.  The load content
+becomes a hash of `file-data` pairs.
+
+Where:
+
+* `file` is the filepath
+* `data` is the content of the file
+
+EXAMPLE:
+--
+Given:
+
+strings1.json
+[source,json]
+----
+{
+  "foo": "bar",
+  "dead": ["a.yaml", "b.yaml"]
+}
+----
+
+a.yaml
+[source,yaml]
+----
+---
+shape: circle
+color: red
+----
+
+b.yaml
+[source,yaml]
+----
+---
+shape: square
+color: blue
+corners: 4
+----
+
+And the block:
+[source,asciidoc]
+------
+[data2text,my_context=strings1.json]
+----
+I'm heading to the {{my_context.foo}}.
+
+{% for item in my_context.dead %}
+{% assign foo = load_file: item %}
+This is {{ foo[shape] }} with color {{ foo[color] }}.
+{% endfor %}
+----
+------
+
+Will render as:
+[source,asciidoc]
+----
+I'm heading to the bar.
+
+This is circle with color red.
+This is square with color blue.
+----
+
+--

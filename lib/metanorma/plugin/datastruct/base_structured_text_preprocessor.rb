@@ -28,6 +28,7 @@ module Metanorma
         Asciidoctor::Extensions::Preprocessor
         BLOCK_START_REGEXP = /\{(.+?)\.\*,(.+),(.+)\}/.freeze
         BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
+        LOAD_FILE_REGEXP = /{% assign (.*) = load_file: (.*) %}/.freeze
 
         def process(document, reader)
           r = ::Asciidoctor::PreprocessorNoIfdefsReader
@@ -86,6 +87,13 @@ module Metanorma
         def collect_internal_block_lines(_document, input_lines, end_mark) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           current_block = []
           while (block_line = input_lines.next) != end_mark
+            if block_line.match?(LOAD_FILE_REGEXP)
+              load_file_match = block_line.match(LOAD_FILE_REGEXP)
+
+              block_line = "{% assign #{load_file_match[1]} = "\
+                           "#{load_file_match[2]}['data'] %}"
+            end
+
             current_block.push(block_line)
           end
           current_block
@@ -93,16 +101,6 @@ module Metanorma
 
         def data_file_type
           @config[:block_name].split("2").first
-        end
-
-        def nested_context_tag(document, file_path, context_name)
-          absolute_file_path = relative_file_path(document, file_path)
-          <<~TEMPLATE
-            {% capture nested_file_path %}
-            #{absolute_file_path}
-            {% endcapture %}
-            {% with_#{data_file_type}_nested_context nested_file_path, #{context_name}  %}
-          TEMPLATE
         end
 
         def parse_template(document, current_block, block_match) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
