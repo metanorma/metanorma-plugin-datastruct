@@ -10,9 +10,7 @@ module Metanorma
         protected
 
         # https://ruby-doc.org/stdlib-2.5.1/libdoc/psych/rdoc/Psych.html#method-c-safe_load
-        def yaml_content_from_file(document, file_path) # rubocop:disable Metrics/MethodLength
-          resolved_file_path = relative_file_path(document, file_path)
-
+        def yaml_content_from_file(resolved_file_path) # rubocop:disable Metrics/MethodLength
           unless File.exist?(resolved_file_path)
             ::Metanorma::Util.log(
               "YAML file referenced in [yaml2text] block not found: " \
@@ -38,9 +36,8 @@ module Metanorma
           )
         end
 
-        def json_content_from_file(document, file_path)
-          JSON.parse(File.read(relative_file_path(document, file_path),
-                               encoding: "UTF-8"))
+        def json_content_from_file(resolved_file_path)
+          JSON.parse(File.read(resolved_file_path, encoding: "UTF-8"))
         end
 
         def json_content_from_anchor(document, anchor)
@@ -48,13 +45,16 @@ module Metanorma
         end
 
         def content_from_file(document, file_path)
-          content = if json_file?(file_path)
-                      json_content_from_file(document, file_path)
-                    else
-                      yaml_content_from_file(document, file_path)
-                    end
+          resolved_file_path = relative_file_path(document, file_path)
+          load_content_from_file(resolved_file_path)
+        end
 
-          load_content_data(content, document, file_path)
+        def load_content_from_file(resolved_file_path)
+          if json_file?(resolved_file_path)
+            json_content_from_file(resolved_file_path)
+          else
+            yaml_content_from_file(resolved_file_path)
+          end
         end
 
         def content_from_anchor(document, anchor)
@@ -63,26 +63,6 @@ module Metanorma
             json_content_from_anchor(document, anchor)
           else
             yaml_content_from_anchor(document, anchor)
-          end
-        end
-
-        def load_content_data(content, document, file_path) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-          if content.is_a?(Hash)
-            content.each do |key, value|
-              content[key] = load_content_data(value, document, file_path)
-            end
-          elsif content.is_a?(Array)
-            content.map { |item| load_content_data(item, document, file_path) }
-          elsif json_or_yaml_filepath?(content.to_s)
-            {
-              "file" => content.to_s,
-              "data" => content_from_file(
-                document,
-                File.expand_path(content.to_s, File.dirname(file_path)),
-              ),
-            }
-          else
-            content
           end
         end
 
