@@ -77,7 +77,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             [#{extension}2text,#{example_file},ar]
             ----
             {ar.*,s,EOS}
-            === {s.#} {s}
+            == {s.#} {s}
 
             This section is about {s}.
 
@@ -128,7 +128,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
             [#{extension}2text,#{example_file},my_item]
             ----
-            === {my_item.name}
+            == {my_item.name}
 
             {my_item.desc}
             ----
@@ -170,7 +170,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             [#{extension}2text,#{example_file},my_item]
             ----
             {my_item.*,key,EOI}
-            === {key}
+            == {key}
 
             {my_item[key]}
 
@@ -297,7 +297,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             Last item is {#{extension}.items[-1]}.
 
             {#{extension}.items.*,s,EOS}
-            === {s.#} -> {s.# + 1} {s} == {#{extension}.items[s.#]}
+            == {s.#} -> {s.# + 1} {s} == {#{extension}.items[s.#]}
 
             [source,ruby]
             ----
@@ -594,7 +594,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             ----
             {% for path in paths %}
             {% for name in attribute_names %}
-            {% assign data = load_file: path %}
+            {% assign data = path | load_file %}
 
             == {{ data[name] | split: "-" | last }}: {{ data[name] }}
 
@@ -680,11 +680,11 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
 
             [#{extension}2text,item1=#{example_file},item2=#{example_file2}]
             ----
-            === {item1.name}
+            == {item1.name}
 
             {item1.desc}
 
-            === {item2.name}
+            == {item2.name}
 
             {item2.desc}
             ----
