@@ -697,13 +697,8 @@ The color is red and the shape is square.
 === Content contains json or yaml filepaths
 
 When the content of the loaded files contains filepaths of json files or
-yaml files, it will load extra data by these filepaths.  The load content
-becomes a hash of `file-data` pairs.
-
-Where:
-
-* `file` is the filepath
-* `data` is the content of the file
+yaml files, you can load extra data by these filepaths by `load_file` liquid
+filter.
 
 EXAMPLE:
 --
@@ -714,9 +709,13 @@ strings1.json
 ----
 {
   "foo": "bar",
-  "dead": ["a.yaml", "b.yaml"]
+  "paths": ["a.yaml", "b.yaml"]
 }
 ----
+
+Where:
+
+* `paths` is an array of filepaths relative to the Metanorma document
 
 a.yaml
 [source,yaml]
@@ -742,12 +741,16 @@ And the block:
 ----
 I'm heading to the {{my_context.foo}}.
 
-{% for item in my_context.dead %}
-{% assign foo = load_file: item %}
+{% for path in my_context.paths %}
+{% assign foo = path | load_file %}
 This is {{ foo[shape] }} with color {{ foo[color] }}.
 {% endfor %}
 ----
 ------
+
+Where:
+
+* load_file is a liquid filter that loads the file content
 
 Will render as:
 [source,asciidoc]
