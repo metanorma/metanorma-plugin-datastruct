@@ -46,15 +46,15 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
 
         [data2text,item1=#{example_json_file},item2=#{example_yaml_file},item3=#{example_yaml_file3}]
         ----
-        === {item1.name}
+        == {item1.name}
 
         {item1.desc}
 
-        === {item2.name}
+        == {item2.name}
 
         {item2.desc}
 
-        === {item3.color}
+        == {item3.color}
 
         {item3.shape}
         ----

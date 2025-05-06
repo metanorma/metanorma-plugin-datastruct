@@ -24,11 +24,11 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
 
         [yaml2text,data=#{example_file},data_two=#{example_file2}]
         ----
-        === Nicaragua
+        == Nicaragua
 
         Amateur stations:: {{ data.groups.amateur.regex }}
 
-        === Niger
+        == Niger
 
         Amateur stations:: {{ data_two.groups.amateur.regex }}
 
@@ -88,11 +88,11 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
 
         [yaml2text,data=#{example_file},data_two=#{example_file2}]
         ----
-        === Nicaragua
+        == Nicaragua
 
         Amateur stations:: {{ data.groups.amateur.regex }}
 
-        === Niger
+        == Niger
 
         Amateur stations:: {{ data_two.groups.amateur.regex }}
 
