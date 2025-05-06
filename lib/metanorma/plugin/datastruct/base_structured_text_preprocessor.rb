@@ -6,6 +6,7 @@ require "asciidoctor/reader"
 require "liquid/custom_blocks/key_iterator"
 require "liquid/custom_filters/values"
 require "liquid/custom_filters/replace_regex"
+require "liquid/custom_filters/loadfile"
 require "metanorma/plugin/datastruct/source_extractor"
 
 Liquid::Environment.default
@@ -28,7 +29,7 @@ module Metanorma
         Asciidoctor::Extensions::Preprocessor
         BLOCK_START_REGEXP = /\{(.+?)\.\*,(.+),(.+)\}/.freeze
         BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
-        LOAD_FILE_REGEXP = /{% assign (.*) = load_file: (.*) %}/.freeze
+        LOAD_FILE_REGEXP = /{% assign (.*) = (.*) \| load_file %}/.freeze
 
         def process(document, reader)
           r = ::Asciidoctor::PreprocessorNoIfdefsReader
@@ -84,14 +85,16 @@ module Metanorma
                          block_match)
         end
 
-        def collect_internal_block_lines(_document, input_lines, end_mark) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def collect_internal_block_lines(document, input_lines, end_mark) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           current_block = []
           while (block_line = input_lines.next) != end_mark
             if block_line.match?(LOAD_FILE_REGEXP)
               load_file_match = block_line.match(LOAD_FILE_REGEXP)
 
+              # Add parent folder as argument to loadfile filter
               block_line = "{% assign #{load_file_match[1]} = "\
-                           "#{load_file_match[2]}['data'] %}"
+                           "#{load_file_match[2]} | loadfile: " \
+                           "\"#{document.attributes['docdir']}\" %}"
             end
 
             current_block.push(block_line)
