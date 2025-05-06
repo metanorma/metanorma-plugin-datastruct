@@ -5,6 +5,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
   context "Multiple contexts" do
     let(:example_json_file) { "example.json" }
     let(:example_yaml_file) { "example2.yaml" }
+    let(:example_yaml_file3) { "example3.yaml" }
 
     before do
       File.open(example_json_file, "w") do |n|
@@ -13,11 +14,15 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
       File.open(example_yaml_file, "w") do |n|
         n.puts(example_content2.to_yaml)
       end
+      File.open(example_yaml_file3, "w") do |n|
+        n.puts(example_content3.to_yaml)
+      end
     end
 
     after do
       FileUtils.rm_rf(example_json_file)
       FileUtils.rm_rf(example_yaml_file)
+      FileUtils.rm_rf(example_yaml_file3)
     end
 
     let(:example_content) do
@@ -25,6 +30,9 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
     end
     let(:example_content2) do
       { "name" => "spaghetti", "desc" => "wheat noodles of 9mm diameter" }
+    end
+    let(:example_content3) do
+      { "color" => "red", "shape" => "circle" }
     end
     let(:input) do
       <<~TEXT
@@ -36,7 +44,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
         :no-isobib:
         :imagesdir: spec/assets
 
-        [data2text,item1=#{example_json_file},item2=#{example_yaml_file}]
+        [data2text,item1=#{example_json_file},item2=#{example_yaml_file},item3=#{example_yaml_file3}]
         ----
         === {item1.name}
 
@@ -45,6 +53,10 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
         === {item2.name}
 
         {item2.desc}
+
+        === {item3.color}
+
+        {item3.shape}
         ----
       TEXT
     end
@@ -59,6 +71,10 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
           <clause id="_" inline-header="false" obligation="normative">
             <title>spaghetti</title>
             <p id="_">wheat noodles of 9mm diameter</p>
+          </clause>
+          <clause id="_" inline-header="false" obligation="normative">
+            <title>red</title>
+            <p id="_">circle</p>
           </clause>
         </sections>
         </metanorma>
