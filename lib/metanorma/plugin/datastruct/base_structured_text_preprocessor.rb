@@ -3,15 +3,19 @@
 require "liquid"
 require "asciidoctor"
 require "asciidoctor/reader"
-require "liquid/custom_blocks/key_iterator"
-require "liquid/custom_filters/values"
-require "liquid/custom_filters/replace_regex"
-require "liquid/custom_filters/loadfile"
-require "metanorma/plugin/datastruct/source_extractor"
+require_relative "liquid/custom_blocks/key_iterator"
+require_relative "liquid/custom_filters/values"
+require_relative "liquid/custom_filters/replace_regex"
+require_relative "liquid/custom_filters/loadfile"
+require_relative "source_extractor"
 
-Liquid::Environment.default
-  .register_tag("keyiterator", Liquid::CustomBlocks::KeyIterator)
-Liquid::Environment.default.register_filter(Liquid::CustomFilters)
+::Liquid::Environment.default.register_tag(
+  "keyiterator",
+  ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator,
+)
+::Liquid::Environment.default.register_filter(
+  ::Metanorma::Plugin::Datastruct::Liquid::CustomFilters,
+)
 
 module Asciidoctor
   class PreprocessorNoIfdefsReader < PreprocessorReader
@@ -187,7 +191,7 @@ module Metanorma
         end
 
         def render_liquid_string(template_string:, contexts:, document:)
-          liquid_template = Liquid::Template.parse(template_string)
+          liquid_template = ::Liquid::Template.parse(template_string)
           # Allow includes for the template
           liquid_template.registers[:file_system] =
             ::Liquid::LocalFileSystem.new(relative_file_path(document, ""))
