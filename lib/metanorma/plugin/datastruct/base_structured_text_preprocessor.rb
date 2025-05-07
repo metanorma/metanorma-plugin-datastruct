@@ -9,14 +9,6 @@ require_relative "liquid/custom_filters/replace_regex"
 require_relative "liquid/custom_filters/loadfile"
 require_relative "source_extractor"
 
-::Liquid::Environment.default.register_tag(
-  "keyiterator",
-  ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator,
-)
-::Liquid::Environment.default.register_filter(
-  ::Metanorma::Plugin::Datastruct::Liquid::CustomFilters,
-)
-
 module Asciidoctor
   class PreprocessorNoIfdefsReader < PreprocessorReader
     def preprocess_conditional_directive(_keyword, _target, _delimiter, _text)
@@ -191,7 +183,8 @@ module Metanorma
         end
 
         def render_liquid_string(template_string:, contexts:, document:)
-          liquid_template = ::Liquid::Template.parse(template_string)
+          liquid_template = ::Liquid::Template
+            .parse(template_string, environment: create_liquid_environment)
           # Allow includes for the template
           liquid_template.registers[:file_system] =
             ::Liquid::LocalFileSystem.new(relative_file_path(document, ""))
@@ -200,6 +193,18 @@ module Metanorma
                     strict_variables: false,
                     error_mode: :warn)
           [rendered_string, liquid_template.errors]
+        end
+
+        def create_liquid_environment
+          liquid_env = ::Liquid::Environment.new
+          liquid_env.register_tag(
+            "keyiterator",
+            ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator,
+          )
+          liquid_env.register_filter(
+            ::Metanorma::Plugin::Datastruct::Liquid::CustomFilters,
+          )
+          liquid_env
         end
 
         def notify_render_errors(document, errors)
