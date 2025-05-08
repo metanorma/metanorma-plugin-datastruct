@@ -712,6 +712,50 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             .to(be_equivalent_to(output))
         end
       end
+
+      context "Multiple contexts with only one argument" do
+        let(:example_content) do
+          [{ "name" => "One", "show" => true },
+           { "name" => "Two", "show" => true },
+           { "name" => "Three", "show" => false }]
+        end
+        let(:input) do
+          <<~TEXT
+            = Document title
+            Author
+            :docfile: test.adoc
+            :nodoc:
+            :novalid:
+            :no-isobib:
+            :imagesdir: spec/assets
+
+            [#{extension}2text,my_context=#{example_file}]
+            ----
+            {% for item in my_context %}
+            {% if item.show %}
+            {{ item.name | upcase }}
+            {{ item.name | size }}
+            {% endif %}
+            {% endfor %}
+            ----
+          TEXT
+        end
+        let(:output) do
+          <<~TEXT
+            #{BLANK_HDR}
+            <sections>
+              <p id='_'>ONE 3</p>
+              <p id='_'>TWO 3</p>
+            </sections>
+            </metanorma>
+          TEXT
+        end
+
+        it "renders liquid markup" do
+          expect(xml_string_content(metanorma_process(input)))
+            .to(be_equivalent_to(output))
+        end
+      end
     end
 
     context "when sources are in the document" do
