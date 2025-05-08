@@ -742,15 +742,15 @@ And the block:
 I'm heading to the {{my_context.foo}}.
 
 {% for path in my_context.paths %}
-{% assign foo = path | load_file %}
-This is {{ foo[shape] }} with color {{ foo[color] }}.
+{% assign data = path | load_file %}
+This is {{ data.shape }} with color {{ data.color }}.
 {% endfor %}
 ----
 ------
 
 Where:
 
-* load_file is a liquid filter that loads the file content
+* `load_file` is a liquid filter that loads the file content
 
 Will render as:
 [source,asciidoc]
