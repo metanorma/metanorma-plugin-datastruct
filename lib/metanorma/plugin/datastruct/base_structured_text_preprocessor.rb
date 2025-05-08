@@ -74,7 +74,8 @@ module Metanorma
 
         def process_text_blocks(document, input_lines)
           line = input_lines.next
-          block_match = line.match(/^\[#{config[:block_name]},(.+?),(.+?)\]/)
+          block_match = line.match(/^\[#{config[:block_name]},(.+?),(.+?)\]/) ||
+            line.match(/^\[#{config[:block_name]},(.+?)\]/)
           return [line] if block_match.nil?
 
           end_mark = input_lines.next
