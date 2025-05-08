@@ -717,6 +717,7 @@ items:
 ----
 
 And the block:
+
 [source,asciidoc]
 --------
 [data2text,yaml=strings.yaml]
