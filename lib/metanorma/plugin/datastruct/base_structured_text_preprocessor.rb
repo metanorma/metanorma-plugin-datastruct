@@ -185,26 +185,29 @@ module Metanorma
         def render_liquid_string(template_string:, contexts:, document:)
           liquid_template = ::Liquid::Template
             .parse(template_string, environment: create_liquid_environment)
+
           # Allow includes for the template
           liquid_template.registers[:file_system] =
             ::Liquid::LocalFileSystem.new(relative_file_path(document, ""))
-          rendered_string = liquid_template
-            .render(contexts,
-                    strict_variables: false,
-                    error_mode: :warn)
+
+          rendered_string = liquid_template.render(
+            contexts,
+            strict_variables: false,
+            error_mode: :warn,
+          )
           [rendered_string, liquid_template.errors]
         end
 
         def create_liquid_environment
-          liquid_env = ::Liquid::Environment.new
-          liquid_env.register_tag(
-            "keyiterator",
-            ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator,
-          )
-          liquid_env.register_filter(
-            ::Metanorma::Plugin::Datastruct::Liquid::CustomFilters,
-          )
-          liquid_env
+          ::Liquid::Environment.new.tap do |liquid_env|
+            liquid_env.register_tag(
+              "keyiterator",
+              ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator,
+            )
+            liquid_env.register_filter(
+              ::Metanorma::Plugin::Datastruct::Liquid::CustomFilters,
+            )
+          end
         end
 
         def notify_render_errors(document, errors)
