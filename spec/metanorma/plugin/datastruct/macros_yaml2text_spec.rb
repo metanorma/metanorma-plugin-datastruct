@@ -40,7 +40,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
       <<~TEXT
          #{BLANK_HDR}
                    <sections>
-              <clause id="_" inline-header="false" obligation="normative">
+              <clause id="_" anchor="_nicaragua" inline-header="false" obligation="normative">
                  <title>Nicaragua</title>
                  <dl id="_">
                     <dt>Amateur stations</dt>
@@ -49,7 +49,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
                     </dd>
                  </dl>
               </clause>
-              <clause id="_" inline-header="false" obligation="normative">
+              <clause id="_" anchor="_niger" inline-header="false" obligation="normative">
                  <title>Niger</title>
                  <dl id="_">
                     <dt>Amateur stations</dt>
@@ -104,7 +104,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
       <<~TEXT
          #{BLANK_HDR}
            <sections>
-              <clause id="_" inline-header="false" obligation="normative">
+              <clause id="_" anchor="_nicaragua" inline-header="false" obligation="normative">
                  <title>Nicaragua</title>
                  <dl id="_">
                     <dt>Amateur stations</dt>
@@ -113,7 +113,7 @@ RSpec.describe Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor do
                     </dd>
                  </dl>
               </clause>
-              <clause id="_" inline-header="false" obligation="normative">
+              <clause id="_" anchor="_niger" inline-header="false" obligation="normative">
                  <title>Niger</title>
                  <dl id="_">
                     <dt>Amateur stations</dt>
