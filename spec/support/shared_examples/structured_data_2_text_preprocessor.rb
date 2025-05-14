@@ -577,9 +577,9 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             "time" => Time.gm(2020, 10, 15, 5, 34),
           }
         end
-        let(:parent_file_1) { fixtures_path("parent_file_1.#{extension}") }
-        let(:parent_file_2) { fixtures_path("parent_file_2.#{extension}") }
-        let(:parent_file_3) { fixtures_path("parent_file_3.#{extension}") }
+        let(:parent_file1) { fixtures_path("parent_file_1.#{extension}") }
+        let(:parent_file2) { fixtures_path("parent_file_2.#{extension}") }
+        let(:parent_file3) { fixtures_path("parent_file_3.#{extension}") }
         let(:input) do
           <<~TEXT
             = Document title
@@ -590,7 +590,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
             :no-isobib:
             :imagesdir: spec/assets
 
-            [#{extension}2text,paths=#{parent_file_1},attribute_names=#{parent_file_2},another_attribute_names=#{parent_file_3}]
+            [#{extension}2text,paths=#{parent_file1},attribute_names=#{parent_file2},another_attribute_names=#{parent_file3}]
             ----
             {% for path in paths %}
             {% for name in attribute_names %}
