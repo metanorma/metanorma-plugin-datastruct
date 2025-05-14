@@ -108,21 +108,21 @@ module Metanorma
             transform_line_liquid(x)
           end
 
-          if block_match[1].include?("=")
-            return content_from_multiple_contexts(
-              document, block_match, transformed_liquid_lines
-            )
-          end
-
-          context_items = if block_match[1].start_with?("#")
-                            content_from_anchor(document, block_match[1][1..-1])
-                          else
-                            content_from_file(document, block_match[1])
-                          end
-
-          return if context_items.nil?
-
-          contexts = { block_match[2].strip => context_items }
+          contexts = if block_match[1].include?("=")
+                       content_from_multiple_contexts(
+                         document, block_match, transformed_liquid_lines
+                       )
+                     elsif block_match[1].start_with?("#")
+                       {
+                         block_match[2].strip =>
+                           content_from_anchor(document, block_match[1][1..-1])
+                       }
+                     else
+                       {
+                         block_match[2].strip =>
+                           content_from_file(document, block_match[1]),
+                       }
+                     end
 
           parse_context_block(document: document,
                               context_lines: transformed_liquid_lines,
@@ -146,13 +146,7 @@ module Metanorma
             end
           end
 
-          parse_context_block(document: document,
-                              context_lines: transformed_liquid_lines,
-                              contexts: contexts)
-        rescue StandardError => e
-          ::Metanorma::Util.log("Failed to parse #{config[:block_name]} \
-            block: #{e.message}", :error)
-          []
+          contexts
         end
 
         def transform_line_liquid(line) # rubocop:disable Metrics/MethodLength
