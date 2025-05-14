@@ -110,12 +110,12 @@ module Metanorma
 
           contexts = if block_match[1].include?("=")
                        content_from_multiple_contexts(
-                         document, block_match, transformed_liquid_lines
+                         document, block_match
                        )
                      elsif block_match[1].start_with?("#")
                        {
                          block_match[2].strip =>
-                           content_from_anchor(document, block_match[1][1..-1])
+                           content_from_anchor(document, block_match[1][1..-1]),
                        }
                      else
                        {
@@ -133,8 +133,7 @@ module Metanorma
           []
         end
 
-        def content_from_multiple_contexts(document, block_match, # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-          transformed_liquid_lines)
+        def content_from_multiple_contexts(document, block_match) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           contexts = {}
           (1..block_match.size - 1).each do |i|
             context_and_paths = block_match[i].strip
@@ -176,7 +175,7 @@ module Metanorma
           render_result.split("\n")
         end
 
-        def render_liquid_string(template_string:, contexts:, document:)
+        def render_liquid_string(template_string:, contexts:, document:) # rubocop:disable Metrics/MethodLength
           liquid_template = ::Liquid::Template
             .parse(template_string, environment: create_liquid_environment)
 
@@ -196,7 +195,7 @@ module Metanorma
           ::Liquid::Environment.new.tap do |liquid_env|
             liquid_env.register_tag(
               "keyiterator",
-              ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator,
+              ::Metanorma::Plugin::Datastruct::Liquid::CustomBlocks::KeyIterator, # rubocop:disable Layout/LineLength
             )
             liquid_env.register_filter(
               ::Metanorma::Plugin::Datastruct::Liquid::CustomFilters,

@@ -51,8 +51,9 @@ module Metanorma
 
         def load_content_from_file(resolved_file_path)
           unless File.exist?(resolved_file_path)
-            ::Metanorma::Util.log(
-              "Failed to load content from file: #{resolved_file_path}", :error)
+            ::Metanorma::Util
+              .log("Failed to load content from file: #{resolved_file_path}",
+                   :error)
           end
 
           if json_file?(resolved_file_path)
