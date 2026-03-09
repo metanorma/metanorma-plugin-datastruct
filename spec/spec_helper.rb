@@ -75,17 +75,17 @@ BLANK_HDR = <<~"HDR".freeze
         <flavor>standoc</flavor>
       </ext>
     </bibdata>
-           <metanorma-extension>
-              <semantic-metadata>
-                 <stage-published>true</stage-published>
-              </semantic-metadata>
-              <presentation-metadata>
-                 <toc-heading-levels>2</toc-heading-levels>
-                 <html-toc-heading-levels>2</html-toc-heading-levels>
-                 <doc-toc-heading-levels>2</doc-toc-heading-levels>
-                 <pdf-toc-heading-levels>2</pdf-toc-heading-levels>
-              </presentation-metadata>
-           </metanorma-extension>
+    <metanorma-extension>
+      <semantic-metadata>
+        <stage-published>true</stage-published>
+      </semantic-metadata>
+      <presentation-metadata>
+        <toc-heading-levels>2</toc-heading-levels>
+        <html-toc-heading-levels>2</html-toc-heading-levels>
+        <doc-toc-heading-levels>2</doc-toc-heading-levels>
+        <pdf-toc-heading-levels>2</pdf-toc-heading-levels>
+      </presentation-metadata>
+    </metanorma-extension>
 HDR
 
 def strip_guid(xml)
