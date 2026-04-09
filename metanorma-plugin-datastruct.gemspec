@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "asciidoctor", "~> 2.0.0"
   spec.add_dependency "isodoc"
+  spec.add_dependency "ostruct"
   spec.add_dependency "relaton-cli"
 
   spec.add_development_dependency "byebug"

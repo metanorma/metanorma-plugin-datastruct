@@ -40,7 +40,7 @@ BLANK_HDR = <<~"HDR".freeze
 
   <metanorma xmlns="https://www.metanorma.org/ns/standoc" type="semantic" version="#{Metanorma::Standoc::VERSION}" flavor="standoc">
     <bibdata type="standard">
-      <title language="en" format="text/plain">Document title</title>
+      <title language="en" type="main">Document title</title>
       <language>en</language>
       <script>Latn</script>
       <status>
@@ -55,21 +55,14 @@ BLANK_HDR = <<~"HDR".freeze
       </ext>
     </bibdata>
     <metanorma-extension>
+      <semantic-metadata>
+        <stage-published>true</stage-published>
+      </semantic-metadata>
       <presentation-metadata>
-        <name>TOC Heading Levels</name>
-        <value>2</value>
-      </presentation-metadata>
-      <presentation-metadata>
-        <name>HTML TOC Heading Levels</name>
-        <value>2</value>
-      </presentation-metadata>
-      <presentation-metadata>
-        <name>DOC TOC Heading Levels</name>
-        <value>2</value>
-      </presentation-metadata>
-      <presentation-metadata>
-         <name>PDF TOC Heading Levels</name>
-        <value>2</value>
+        <toc-heading-levels>2</toc-heading-levels>
+        <html-toc-heading-levels>2</html-toc-heading-levels>
+        <doc-toc-heading-levels>2</doc-toc-heading-levels>
+        <pdf-toc-heading-levels>2</pdf-toc-heading-levels>
       </presentation-metadata>
     </metanorma-extension>
 HDR

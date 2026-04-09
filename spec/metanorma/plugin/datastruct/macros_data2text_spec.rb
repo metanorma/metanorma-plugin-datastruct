@@ -64,16 +64,16 @@ RSpec.describe Metanorma::Plugin::Datastruct::Data2TextPreprocessor do
       <<~TEXT
         #{BLANK_HDR}
         <sections>
-          <clause id="_" anchor="_lorem_ipsum" inline-header="false" obligation="normative">
-            <title>Lorem ipsum</title>
+          <clause id="_" inline-header="false" obligation="normative">
+            <title id="_">Lorem ipsum</title>
             <p id="_">dolor sit amet</p>
           </clause>
-          <clause id="_" anchor="_spaghetti" inline-header="false" obligation="normative">
-            <title>spaghetti</title>
+          <clause id="_" inline-header="false" obligation="normative">
+            <title id="_">spaghetti</title>
             <p id="_">wheat noodles of 9mm diameter</p>
           </clause>
-          <clause id="_" anchor="_red" inline-header="false" obligation="normative">
-            <title>red</title>
+          <clause id="_" inline-header="false" obligation="normative">
+            <title id="_">red</title>
             <p id="_">circle</p>
           </clause>
         </sections>
