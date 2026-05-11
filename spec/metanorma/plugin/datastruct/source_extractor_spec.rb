@@ -1,12 +1,11 @@
 require "spec_helper"
 require "metanorma/plugin/datastruct/yaml2_text_preprocessor"
+require "metanorma/plugin/datastruct/source_extractor"
 
 RSpec.describe Metanorma::Plugin::Datastruct::SourceExtractor do
-  subject { described_class.new(document, input_lines) }
-  let(:document) { Asciidoctor::Document.new }
-  let(:input_lines) { "" }
+  describe ".extract" do
+    let(:document) { Asciidoctor::Document.new }
 
-  describe "#extract" do
     context "when anchor of type [[anchor_name]] is present" do
       context "when anchor is in the same file" do
         let(:input_lines) do
@@ -37,8 +36,8 @@ RSpec.describe Metanorma::Plugin::Datastruct::SourceExtractor do
           }
         end
 
-        it "should extract all the anchors and their corresponding data" do
-          subject.extract
+        it "extracts all anchors and their corresponding data" do
+          described_class.extract(document, input_lines)
 
           expect(document.attributes["source_blocks"]).to eq(expected_output)
         end
@@ -74,168 +73,67 @@ RSpec.describe Metanorma::Plugin::Datastruct::SourceExtractor do
           end
         end
 
-        it "should extract all the anchors and their corresponding data" do
-          subject.extract
-
-          expect(document.attributes["source_blocks"]).to eq(expected_output)
-        end
-
         after do
           FileUtils.rm_rf("file.adoc")
         end
-      end
-    end
-  end
 
-  describe "#match_anchor" do
-    let(:match_anchor) { subject.send(:match_anchor, line) }
+        it "extracts all anchors from included file" do
+          described_class.extract(document, input_lines)
 
-    anchors = [
-      "[[anchor_name]]",
-      "[#anchor_name]",
-      "[source#anchor_name,ruby]",
-      "[id=anchor_name]",
-      "[source,id='anchor_name']",
-      "[source,id=\"anchor_name\"]",
-    ]
-
-    anchors.each do |anchor|
-      context "when input contains #{anchor}" do
-        let(:line) { anchor }
-
-        it { expect(match_anchor[1]).to eq("anchor_name") }
-      end
-    end
-  end
-
-  describe "#readlines_safe" do
-    let(:readlines_safe) { subject.send(:readlines_safe, file) }
-    let(:file) { Tempfile.new(["tmpfile", ".adoc"]) }
-
-    context "when file is empty" do
-      it { expect(readlines_safe).to eq([]) }
-    end
-
-    context "when file is not empty" do
-      before do
-        file.puts "first line\nsecond line"
-        file.rewind
-      end
-
-      it { expect(readlines_safe).to eq(["first line\n", "second line\n"]) }
-    end
-  end
-
-  describe "#read" do
-    let(:read) { subject.send(:read, file.path) }
-    let(:file) { Tempfile.new(["tmpfile", ".adoc"]) }
-
-    context "when file is empty" do
-      it { expect(read).to eq([]) }
-    end
-
-    context "when file is not empty" do
-      before do
-        file.puts "first line\nsecond line"
-        file.rewind
-      end
-
-      it { expect(read).to eq(["first line", "second line"]) }
-    end
-  end
-
-  describe "#filename" do
-    let(:filename) { subject.send(:filename, document, line) }
-
-    context "when line is neither included nor embedded" do
-      let(:line) { "some random text in file" }
-
-      it { expect(filename).to be_nil }
-    end
-
-    context "when file exists" do
-      before do
-        File.open("file.adoc", "w") do |f|
-          f.puts("some content")
+          expect(document.attributes["source_blocks"]).to eq(expected_output)
         end
       end
-
-      after do
-        FileUtils.rm_rf("file.adoc")
-      end
-
-      context "when file is included" do
-        let(:line) { "include::file.adoc[]" }
-
-        it { expect(filename).to include("/file.adoc") }
-      end
-
-      context "when file is embedded" do
-        let(:line) { "embed::file.adoc[]" }
-
-        it { expect(filename).to include("/file.adoc") }
-      end
     end
 
-    context "when file do not exists" do
-      context "when file is included" do
-        let(:line) { "include::file.adoc[]" }
+    context "when multiple anchor formats are present" do
+      let(:document) { Asciidoctor::Document.new }
 
-        it { expect(filename).to be_nil }
-      end
+      anchors = {
+        "[[anchor_name]]" => "anchor_name",
+        "[#anchor_name]" => "anchor_name",
+        "[source#anchor_name,ruby]" => "anchor_name",
+        "[id=anchor_name]" => "anchor_name",
+        "[source,id='anchor_name']" => "anchor_name",
+        "[source,id=\"anchor_name\"]" => "anchor_name",
+      }
 
-      context "when file is embedded" do
-        let(:line) { "embed::file.adoc[]" }
+      anchors.each do |anchor_line, expected_id|
+        context "when input contains #{anchor_line}" do
+          let(:input_lines) do
+            [anchor_line, "----", "data", "----"]
+          end
 
-        it { expect(filename).to be_nil }
-      end
-    end
-  end
+          it "extracts anchor with id '#{expected_id}'" do
+            described_class.extract(document, input_lines)
 
-  describe "#relative_file_path" do
-    before do
-      File.open("file.adoc", "w") do |f|
-        f.puts("some content")
+            expect(document.attributes["source_blocks"]).to have_key(expected_id)
+          end
+        end
       end
     end
 
-    after do
-      FileUtils.rm_rf("file.adoc")
+    context "when section delimiters are mismatched" do
+      let(:document) { Asciidoctor::Document.new }
+      let(:input_lines) do
+        <<~SECTION.split("\n")
+          [[section1]]
+          ----
+          content inside the section
+          will not end at
+          ---
+          so this will be inside the section
+          ----
+          some text
+          after section
+        SECTION
+      end
+
+      it "only closes on matching delimiter" do
+        described_class.extract(document, input_lines)
+
+        expect(document.attributes["source_blocks"]["section1"])
+          .to eq("content inside the section\nwill not end at\n---\nso this will be inside the section")
+      end
     end
-
-    let(:relative_file_path) do
-      subject.send(:relative_file_path, document, "file.adoc")
-    end
-
-    let(:expected_output) { "/metanorma-plugin-datastruct/file.adoc" }
-
-    it { expect(relative_file_path).to include(expected_output) }
-  end
-
-  describe "#read_section" do
-    let(:read_section) { subject.send(:read_section, lines) }
-    let(:lines) do
-      <<~SECTION.split("\n").to_enum
-        ----
-        content inside the section
-        will not end at
-        ---
-        so this will be inside the section
-        ----
-        some text
-        after section
-      SECTION
-    end
-
-    let(:expected_output) do
-      <<~OUTPUT.strip
-        content inside the section
-        will not end at
-        ---
-        so this will be inside the section
-      OUTPUT
-    end
-
-    it { expect(read_section).to eq(expected_output) }
   end
 end

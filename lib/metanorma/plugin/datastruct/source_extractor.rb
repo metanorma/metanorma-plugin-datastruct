@@ -1,20 +1,18 @@
+# frozen_string_literal: true
+
+require_relative "path_resolver"
+
 module Metanorma
   module Plugin
     module Datastruct
       class SourceExtractor
-        # example:
-        #   - [[abc]]
-        ANCHOR_REGEX_1 = /^\[\[(?<id>[^\]]*)\]\]\s*$/.freeze
+        include PathResolver
 
-        # examples:
-        #   - [#abc]
-        #   - [source#abc,ruby]
-        ANCHOR_REGEX_2 = /^\[[^#,]*#(?<id>[^,\]]*)[,\]]/.freeze
-
-        # examples:
-        #   - [id=abc]
-        #   - [source,id="abc"]
-        ANCHOR_REGEX_3 = /^\[(?:.+,)?id=['"]?(?<id>[^,\]'"]*)['"]?[,\]]/.freeze
+        ANCHOR_PATTERNS = [
+          /^\[\[(?<id>[^\]]*)\]\]\s*$/,
+          /^\[[^#,]*#(?<id>[^,\]]*)[,\]]/,
+          /^\[(?:.+,)?id=['"]?(?<id>[^,\]'"]*)['"]?[,\]]/,
+        ].freeze
 
         def initialize(document, input_lines)
           @document = document
@@ -27,17 +25,17 @@ module Metanorma
           new(document, input_lines).extract
         end
 
-        def extract # rubocop:disable Metrics/AbcSize
+        def extract
           lines = @input_lines.to_enum
 
           loop do
             line = lines.next
 
             if /^embed::|^include::/.match?(line.strip)
-              file_lines = read(filename(@document, line)) or next
+              file_lines = read(filename(line)) or next
               SourceExtractor.extract(@document, file_lines)
             elsif m = match_anchor(line)
-              @document.attributes["source_blocks"][m[:id]] = read_section lines
+              @document.attributes["source_blocks"][m[:id]] = read_section(lines)
             end
           end
         end
@@ -45,40 +43,27 @@ module Metanorma
         private
 
         def match_anchor(line)
-          line.match(ANCHOR_REGEX_1) ||
-            line.match(ANCHOR_REGEX_2) ||
-            line.match(ANCHOR_REGEX_3)
-        end
-
-        def readlines_safe(file)
-          return [] if file.eof?
-
-          file.readlines
+          ANCHOR_PATTERNS.each do |pattern|
+            match = line.match(pattern)
+            return match if match
+          end
+          nil
         end
 
         def read(inc_path)
-          inc_path or return nil
-          ::File.open inc_path, "r" do |fd|
-            readlines_safe(fd).map(&:chomp)
+          return nil unless inc_path
+
+          File.open(inc_path, "r") do |fd|
+            fd.eof? ? [] : fd.readlines.map(&:chomp)
           end
         end
 
-        def filename(document, line)
+        def filename(line)
           m = /(^include::|^embed::)([^\[]+)\[/.match(line)
           return nil unless m
 
-          file_path = relative_file_path(document, m[2])
-
+          file_path = relative_file_path(@document, m[2])
           File.exist?(file_path) ? file_path : nil
-        end
-
-        def relative_file_path(document, file_path)
-          docfile_directory = File.dirname(
-            document.attributes["docfile"] || ".",
-          )
-          document
-            .path_resolver
-            .system_path(file_path, docfile_directory)
         end
 
         def read_section(lines)
