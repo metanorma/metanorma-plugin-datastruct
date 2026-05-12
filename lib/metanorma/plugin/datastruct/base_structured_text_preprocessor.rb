@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "set"
 require "liquid"
 require "asciidoctor"
 require "asciidoctor/reader"
@@ -19,6 +20,11 @@ module Metanorma
 
         BLOCK_START_REGEXP = /\{(.+?)\.\*,(.+),(.+)\}/.freeze
         BLOCK_END_REGEXP = /\A\{[A-Z]+\}\z/.freeze
+        NESTED_CONTEXT_SUFFIX = {
+          "yaml2text" => "yaml",
+          "json2text" => "json",
+          "data2text" => "yaml",
+        }.freeze
 
         def initialize(config = {})
           super
@@ -72,7 +78,7 @@ module Metanorma
 
         def collect_internal_block_lines(document, input_lines, end_mark)
           current_block = []
-          nested_marks = []
+          nested_marks = Set.new
           while (block_line = input_lines.next) != end_mark
             if nested_match = block_line
                 .match(/^\[#{config[:block_name]},(.+?),(.+?)\]/)
@@ -80,11 +86,11 @@ module Metanorma
                 .push(*nested_context_tag(document,
                                           nested_match[1],
                                           nested_match[2]).split("\n"))
-              next nested_marks.push(input_lines.next)
+              next nested_marks.add(input_lines.next)
             end
 
             if nested_marks.include?(block_line)
-              current_block.push("{% endwith_#{data_file_type}_nested_context %}")
+              current_block.push("{% endwith_#{nested_context_suffix}_nested_context %}")
               next nested_marks.delete(block_line)
             end
             current_block.push(block_line)
@@ -92,8 +98,8 @@ module Metanorma
           current_block
         end
 
-        def data_file_type
-          config[:block_name].split("2").first
+        def nested_context_suffix
+          NESTED_CONTEXT_SUFFIX[config[:block_name]]
         end
 
         def nested_context_tag(document, file_path, context_name)
@@ -102,7 +108,7 @@ module Metanorma
             {% capture nested_file_path %}
             #{absolute_file_path}
             {% endcapture %}
-            {% with_#{data_file_type}_nested_context nested_file_path, #{context_name}  %}
+            {% with_#{nested_context_suffix}_nested_context nested_file_path, #{context_name}  %}
           TEMPLATE
         end
 
@@ -122,13 +128,8 @@ module Metanorma
         end
 
         def transform_line_liquid(line)
-          if line.match?(BLOCK_START_REGEXP)
-            line.gsub!(BLOCK_START_REGEXP, '{% keyiterator \1, \2 %}')
-          end
-
-          if line.strip.match?(BLOCK_END_REGEXP)
-            line.gsub!(BLOCK_END_REGEXP, "{% endkeyiterator %}")
-          end
+          line = line.gsub(BLOCK_START_REGEXP, '{% keyiterator \1, \2 %}') if line.match?(BLOCK_START_REGEXP)
+          line = line.gsub(BLOCK_END_REGEXP, "{% endkeyiterator %}") if line.strip.match?(BLOCK_END_REGEXP)
           line
             .gsub(/(?<!{){(?!%)([^{}]+)(?<!%)}(?!})/, '{{\1}}')
             .gsub(/[a-z.]+\#/, "index")
