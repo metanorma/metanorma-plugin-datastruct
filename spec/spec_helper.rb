@@ -17,12 +17,9 @@ Canon::Config.configure do |config|
   config.xml.diff.max_node_count = 50_000
 end
 
-# The standoc converter registers lutaml's yaml2text/json2text preprocessors
-# in its extension group. Both lutaml and datastruct handle the same block
-# names, so lutaml's preprocessors intercept blocks meant for datastruct.
-# Fix: register datastruct's preprocessors in their own group placed BEFORE
-# the standoc group, so datastruct handles the blocks first. All other
-# extensions (inline macros, block macros, etc.) remain untouched.
+# Standoc's converter registers lutaml's preprocessors which intercept the same
+# block names (yaml2text/json2text). This inserts datastruct's preprocessors
+# before standoc's group so datastruct handles the blocks first.
 RSpec.configure do |config|
   config.around do |example|
     original_groups = Asciidoctor::Extensions.groups.dup
@@ -31,11 +28,10 @@ RSpec.configure do |config|
         preprocessor Metanorma::Plugin::Datastruct::Json2TextPreprocessor
         preprocessor Metanorma::Plugin::Datastruct::Yaml2TextPreprocessor
       end
-      # Move datastruct's group (last key) to the front of the hash
+      # Move datastruct's group to the front so it processes blocks before standoc
       groups = Asciidoctor::Extensions.groups
       ds_key = groups.keys.last
-      ds_proc = groups.delete(ds_key)
-      reordered = { ds_key => ds_proc }
+      reordered = { ds_key => groups.delete(ds_key) }
       groups.each { |k, v| reordered[k] = v }
       Asciidoctor::Extensions.instance_variable_set(:@groups, reordered)
       example.run
