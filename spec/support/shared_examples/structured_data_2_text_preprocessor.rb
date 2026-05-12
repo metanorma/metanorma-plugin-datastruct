@@ -1,6 +1,6 @@
 RSpec.shared_examples "structured data 2 text preprocessor" do
   describe "#process" do
-    let(:example_file) { "example.#{extention}" }
+    let(:example_file) { "example.#{extension}" }
 
     before do
       File.open(example_file, "w") do |n|
@@ -30,7 +30,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},my_context]
+          [#{extension}2text,#{example_file},my_context]
           ----
           {my_context.*,item,EOF}
             {item.name}:: {item.desc}
@@ -73,7 +73,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},ar]
+          [#{extension}2text,#{example_file},ar]
           ----
           {ar.*,s,EOS}
           === {s.#} {s}
@@ -125,7 +125,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},my_item]
+          [#{extension}2text,#{example_file},my_item]
           ----
           === {my_item.name}
 
@@ -166,7 +166,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},my_item]
+          [#{extension}2text,#{example_file},my_item]
           ----
           {my_item.*,key,EOI}
           === {key}
@@ -216,7 +216,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},ar]
+          [#{extension}2text,#{example_file},ar]
           ----
           {ar.*,item,EOF}
 
@@ -290,17 +290,17 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},#{extention}]
+          [#{extension}2text,#{example_file},#{extension}]
           ------
-          First item is {#{extention}.items[0]}.
-          Last item is {#{extention}.items[-1]}.
+          First item is {#{extension}.items[0]}.
+          Last item is {#{extension}.items[-1]}.
 
-          {#{extention}.items.*,s,EOS}
-          === {s.#} -> {s.# + 1} {s} == {#{extention}.items[s.#]}
+          {#{extension}.items.*,s,EOS}
+          === {s.#} -> {s.# + 1} {s} == {#{extension}.items[s.#]}
 
           [source,ruby]
           ----
-          {#{extention}.prefix}{s.#}.rb[]
+          {#{extension}.prefix}{s.#}.rb[]
           ----
 
           {EOS}
@@ -362,7 +362,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},ar]
+          [#{extension}2text,#{example_file},ar]
           ----
           {ar.*,item,EOF}
           .{item.values[1]}
@@ -422,7 +422,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},authorities]
+          [#{extension}2text,#{example_file},authorities]
           ----
           [cols="a,a,a,a",options="header"]
           |===
@@ -495,7 +495,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},my_context]
+          [#{extension}2text,#{example_file},my_context]
           ----
           {% for item in my_context %}
           {% if item.show %}
@@ -540,7 +540,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{example_file},my_context]
+          [#{extension}2text,#{example_file},my_context]
           ----
           {{my_context.time}}
 
@@ -572,13 +572,13 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           "time" => Time.gm(2020, 10, 15, 5, 34),
         }
       end
-      let(:parent_file) { "parent_file.#{extention}" }
+      let(:parent_file) { "parent_file.#{extension}" }
       let(:parent_file_content) { [nested_file, nested_file_2] }
-      let(:parent_file_2) { "parent_file_2.#{extention}" }
+      let(:parent_file_2) { "parent_file_2.#{extension}" }
       let(:parent_file_2_content) { ["name", "description"] }
-      let(:parent_file_3) { "parent_file_3.#{extention}" }
+      let(:parent_file_3) { "parent_file_3.#{extension}" }
       let(:parent_file_3_content) { ["one", "two"] }
-      let(:nested_file) { "nested_file.#{extention}" }
+      let(:nested_file) { "nested_file.#{extension}" }
       let(:nested_file_content) do
         {
           "name" => "nested file-main",
@@ -587,7 +587,7 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           "two" => "nested two-main",
         }
       end
-      let(:nested_file_2) { "nested_file_2.#{extention}" }
+      let(:nested_file_2) { "nested_file_2.#{extension}" }
       let(:nested_file_2_content) do
         {
           "name" => "nested2 name-main",
@@ -606,15 +606,15 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           :no-isobib:
           :imagesdir: spec/assets
 
-          [#{extention}2text,#{parent_file},paths]
+          [#{extension}2text,#{parent_file},paths]
           ----
           {% for path in paths %}
 
-          [#{extention}2text,#{parent_file_2},attribute_names]
+          [#{extension}2text,#{parent_file_2},attribute_names]
           ---
           {% for name in attribute_names %}
 
-          [#{extention}2text,{{ path }},data]
+          [#{extension}2text,{{ path }},data]
           --
 
           == {{ data[name] | split: "-" | last }}: {{ data[name] }}
@@ -624,11 +624,11 @@ RSpec.shared_examples "structured data 2 text preprocessor" do
           {% endfor %}
           ---
 
-          [#{extention}2text,#{parent_file_3},attribute_names]
+          [#{extension}2text,#{parent_file_3},attribute_names]
           ---
           {% for name in attribute_names %}
 
-          [#{extention}2text,{{ path }},data]
+          [#{extension}2text,{{ path }},data]
           --
 
           == {{ data[name] }}
