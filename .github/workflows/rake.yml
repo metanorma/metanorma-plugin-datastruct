@@ -2,9 +2,6 @@
 # See https://github.com/metanorma/cimas
 name: rake
 
-permissions:
-  contents: read
-
 on:
   push:
     branches: [ master, main ]
