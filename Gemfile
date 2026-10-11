@@ -18,3 +18,4 @@ gem "simplecov"
 gem "timecop"
 gem "vcr"
 gem "webmock"
+gem "metanorma-document", github: "metanorma/metanorma-document", branch: "main" # standoc main needs Document::Components::AncillaryBlocks
