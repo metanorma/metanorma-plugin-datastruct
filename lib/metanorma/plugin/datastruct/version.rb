@@ -1,7 +1,7 @@
 module Metanorma
   module Plugin
     module Datastruct
-      VERSION = "0.3.12.pre.alpha.1".freeze
+      VERSION = "0.3.12".freeze
     end
   end
 end
